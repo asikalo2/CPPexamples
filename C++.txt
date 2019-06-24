@@ -1,0 +1,5087 @@
+/* TP, 2016/2017, Zadaæa 1, Zadatak 1
+	
+	NAPOMENA: ulaz/izlaz za zadatke je specificiran
+	javnim autotestovima. Zalbe za ne analiziranje testova
+	se ne uvazavaju!
+	
+	NAPOMENA: nece svi (javni) testovi sa zamgera biti 
+	dostupni na c9.
+	
+*/
+
+#include <iostream>
+#include <vector>
+
+std::vector<int>Cifre (int n){
+	std::vector<int> h;
+	int x;
+	do{
+		x=n%3;
+		h.push_back(x);
+		n/=3;
+	} while(n!=0);
+	
+	return h;
+}
+
+
+
+bool Ponavljanje_cifara(std::vector<int> h){
+	
+	int brojacnula(0), brojacjedinica(0), brojacdvica(0);
+	
+	for(int i=0; i<h.size(); i++){
+		if(h[i]==0) brojacnula++;
+		if((h[i]==1) || (h[i]==-1)) brojacjedinica++;
+		if((h[i]==2) || (h[i]==-2)) brojacdvica++;
+		}
+
+	if((brojacdvica%2==0 && brojacjedinica%2==0 && brojacnula%2==0) || (brojacnula==0 && brojacdvica%2!=0 && brojacjedinica%2!=0) 
+	   ||(brojacdvica==0 && brojacjedinica%2!=0 && brojacnula%2!=0) || (brojacjedinica==0 && brojacdvica%2!=0 && brojacnula%2!=0) 
+	   || (brojacdvica%2!=0 && brojacjedinica%2!=0 && brojacnula%2!=0)|| (brojacjedinica%2!=0 && brojacdvica==0 && brojacnula==0)
+	   || (brojacdvica%2!=0 && brojacjedinica==0 && brojacnula==0) || (brojacnula%2!=0 && brojacdvica==0 && brojacjedinica==0)) return true;
+	
+	
+	return false;
+}
+
+bool Ponavljanje_cifara2(std::vector<int> h){
+	int brojacnula(0),brojacjedinica(0),brojacdvica(0);
+	for(int i=0; i<h.size(); i++){
+		if(h[i]==0) brojacnula++;
+		if((h[i]==1) || (h[i]==-1)) brojacjedinica++;
+		if((h[i]==2) || (h[i]==-2)) brojacdvica++;
+		}
+
+	if(brojacdvica%2==0 && brojacjedinica%2==0 && brojacnula%2==0) return true;
+	else  return false;
+}
+
+std::vector<int> jedinstveni(std::vector<int> v){
+	std::vector<int> novi; int i(0);int j(0);
+	for(i=0; i<v.size();i++){
+		for(j=0; j<i; j++){
+			if(v[i]==v[j])
+			break;
+		}
+		if(i==j) {novi.push_back(v[i]);
+	  }
+	}
+return novi;
+}
+
+std::vector<int> IzdvojiGadne(std::vector<int> v,bool istinitost){
+	v=jedinstveni(v);
+	std::vector<int> b;
+	std::vector<int> c;
+	
+	for(int i=0; i<v.size(); i++){
+		
+		//int a=;
+		
+		if(Ponavljanje_cifara(Cifre(v[i]))==true) {
+			if(Ponavljanje_cifara2(Cifre(v[i]))==true) b.push_back(v[i]);
+			else c.push_back(v[i]);
+		}
+	}
+	if(istinitost==true) return b;
+	else return c;
+}
+
+ 
+
+
+int main ()
+{
+	int n;
+	std::vector<int> v;
+	std::vector<int> h;
+	//bool dupli(false);
+	
+	std::cout<<"Unesite brojeve (0 za prekid unosa): ";
+	do{
+		std::cin>>n;
+		v.push_back(n);
+	} while(n!=0);
+	
+
+	
+	std::vector<int> m = IzdvojiGadne(v,true);
+	std::vector<int> l = IzdvojiGadne(v,false);
+	
+	
+	std::cout<<"Opaki: ";
+	if(m.size()!=0){
+		for(int i=0; i<m.size(); i++){
+			std::cout<<m[i]<<" ";
+		}
+	}
+	
+	std::cout<<std::endl<<"Odvratni: ";
+	if(l.size()!=0){
+		for(int i=0; i<l.size()-1; i++){
+			std::cout<<l[i]<<" ";
+		}
+	}
+	
+	return 0;
+}
+________________________________________________________________________________________
+
+/* TP, 2016/2017, Zadaæa 1, Zadatak 2
+	
+	NAPOMENA: ulaz/izlaz za zadatke je specificiran
+	javnim autotestovima. Zalbe za ne analiziranje testova
+	se ne uvazavaju!
+	
+	NAPOMENA: nece svi (javni) testovi sa zamgera biti 
+	dostupni na c9.
+	
+*/
+
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <stdexcept>
+
+std::vector<std::vector<double>> KreirajMatricu(int br_redova, int br_kolona){
+	return std::vector<std::vector<double>>(br_redova,std::vector<double> (br_kolona));
+}
+
+int BrojRedova(std::vector<std::vector<double>> m){
+	return m.size();
+}
+
+int BrojKolona(std::vector<std::vector<double>> m) {
+	return m[0].size();
+}
+
+std::vector<std::vector<double>> UnesiMatricu(int br_redova,int br_kolona){
+	auto m(KreirajMatricu(br_redova,br_kolona));
+	for(int i=0; i<br_redova; i++)
+	for(int j=0; j<br_kolona; j++){
+		std::cin>>m[i][j];
+	}
+	return m;
+}
+
+void IspisiMatricu(std::vector<std::vector<double>> m){
+	for(int i=0; i<BrojRedova(m); i++){
+	for(int j=0; j<BrojKolona(m); j++){
+		std::cout<<std::setw(4)<<m[i][j];
+	}
+		std::cout<<std::endl;
+}}
+
+std::vector<std::vector<double>> HM (std::vector<std::vector<double>> a){
+	std::vector<std::vector<double>> nova(0);
+	
+	for(int i=0; i<BrojRedova(a); i++){
+		std::vector<double> red(0);
+		   for(int j=BrojKolona(a)-1; j>=0; j--)
+		   red.push_back(a[i][j]);
+		   
+		   nova.push_back(red);
+		}
+		return nova;
+	}
+	
+std::vector<std::vector<double>> VM (std::vector<std::vector<double>> a){
+	std::vector<std::vector<double>> nova(0);
+	
+	for(int i=BrojRedova(a)-1; i>=0; i--){
+		std::vector<double> red(0);
+		   for(int j=0; j<BrojKolona(a); j++)
+		   		red.push_back(a[i][j]);
+		   
+		   nova.push_back(red);
+		}
+		return nova;
+	}
+	
+std::vector<std::vector<double>> HVM (std::vector<std::vector<double>> a){
+	std::vector<std::vector<double>> nova(0);
+	
+	for(int i=BrojRedova(a)-1; i>=0; i--){
+		std::vector<double> red(0);
+		   for(int j=BrojKolona(a)-1; j>=0; j--)
+		   red.push_back(a[i][j]);
+		   
+		   nova.push_back(red);
+		}
+		return nova;
+	}
+
+std::vector<std::vector<double>> OgledaloMatrica (std::vector<std::vector<double>> s){
+	if(s.size()<1)
+	return s;
+	
+	for(int i=0; i<BrojRedova(s);i++){
+		if(s[i].size() != s[0].size())
+			throw std::domain_error("Matrica nije korektna");
+	}
+
+
+	std::vector<std::vector<double>> m(KreirajMatricu(3*BrojRedova(s),3*BrojKolona(s)));
+	std::vector<std::vector<double>> hm(HM(s));
+	std::vector<std::vector<double>> vm(VM(s));
+	std::vector<std::vector<double>> hvm(HVM(s));
+	
+	
+	for(int i=0; i<BrojRedova(s); i++)
+		for(int j=0; j<BrojKolona(s); j++){
+			m[i][j]=hvm[i][j];
+			m[i][2*BrojKolona(s)+j]=hvm[i][j];
+			m[2*BrojRedova(s)+i][j]=hvm[i][j];
+			m[2*BrojRedova(s)+i][2*BrojKolona(s)+j]=hvm[i][j];
+		}
+
+	for(int i=0; i<BrojRedova(s); i++)
+		for(int j=0; j<BrojKolona(s); j++){
+			m[i][BrojKolona(s)+j]=vm[i][j];
+			m[2*BrojRedova(s)+i][BrojKolona(s)+j]=vm[i][j];
+		}
+
+	for(int i=0; i<BrojRedova(s); i++)
+		for(int j=0; j<BrojKolona(s); j++){
+			m[BrojRedova(s)+i][j]=hm[i][j];
+			m[BrojRedova(s)+i][2*BrojKolona(s)+j]=hm[i][j];
+		}
+		
+	// upisivanje originalne matrice u sredinu
+	for(int i=0; i<BrojRedova(s); i++)
+		for(int j=0; j<BrojKolona(s); j++){
+			m[BrojRedova(s)+i][BrojKolona(s)+j]=s[i][j];
+		}
+		
+	return m;
+}
+
+int main ()
+{
+	int k,n;
+	std::cout<<"Unesite dimenzije matrice (m n): ";
+	std::cin>>k>>n;
+	if(k<0 || n<0) {
+		std::cout<<"Dimenzije matrice moraju biti nenegativne!";
+		return 0;
+	}
+	
+	std::vector<std::vector<double>> m=KreirajMatricu(k,n);
+	std::cout<<"Unesite elemente matrice: ";
+	for(int i=0; i<k; i++){
+		for(int j=0; j<n; j++){
+			std::cin>>m[i][j];
+		}
+	}
+	
+	std::cout<<"\nRezultantna matrica:\n";
+	
+	//if(m.size()==0) return 0;
+	
+	std::vector<std::vector<double>> nova(OgledaloMatrica(m));
+	IspisiMatricu(nova);
+	return 0;
+}
+_________________________________________________________________________________________
+/* TP, 2016/2017, Zadaæa 1, Zadatak 3
+	
+	NAPOMENA: ulaz/izlaz za zadatke je specificiran
+	javnim autotestovima. Zalbe za ne analiziranje testova
+	se ne uvazavaju!
+	
+	NAPOMENA: nece svi (javni) testovi sa zamgera biti 
+	dostupni na c9.
+	
+*/
+
+#include <iostream>
+#include <vector>
+#include <iomanip>
+
+void IspisiMatricu(std::vector<std::vector<double>> m){
+	
+	for(int i=0; i<m.size(); i++){
+		for(int j=0; j<m[0].size(); j++)
+		std::cout<<m[i][j]<<" ";
+		std::cout<<std::endl;
+	}
+}
+
+std::vector<std::vector<double>> RastuciPodnizovi (std::vector<double> v){
+	std::vector<std::vector<double>> izlaznamatrica;	
+		std::vector<double> red;
+			
+	for(int i=0; i<v.size()-1; i++){
+		
+		if(v[i+1]>=v[i]){
+			red.push_back(v[i]);
+		}
+		
+		else{
+			if(red.size()>=1){
+				red.push_back(v[i]);
+				izlaznamatrica.push_back(red);
+			}
+		red.clear();
+		}
+	}
+	
+	
+	//ispisivanje posljednjeg reda 
+	if(red.size()>=1){
+    	red.push_back(v[v.size()-1]);
+	    	izlaznamatrica.push_back(red);
+		}
+	
+	return izlaznamatrica;
+}
+
+std::vector<std::vector<double>> OpadajuciPodnizovi (std::vector<double> v){
+	std::vector<std::vector<double>> izlaznamatrica;	
+		std::vector<double> red;
+			
+	for(int i=0; i<v.size()-1; i++){
+
+		
+		if(v[i+1]<=v[i]){
+			red.push_back(v[i]);
+		}
+		
+		else{
+			if(red.size()>=1){
+				red.push_back(v[i]);
+				izlaznamatrica.push_back(red);
+		}
+		red.clear();
+		}
+	}
+	
+	
+	//ispisivanje posljednjeg reda 
+	if(red.size()>=1){
+    	red.push_back(v[v.size()-1]);
+	    	izlaznamatrica.push_back(red);
+		}
+	
+	return izlaznamatrica;
+}
+
+int main ()
+{
+	std::vector<double> v;
+	int n;
+	std::cout<<"Unesite broj elemenata vektora: ";
+	std::cin>>n;
+	std::cout<<"Unesite elemente vektora: ";
+	for(int i=0; i<n; i++){
+		int k;
+		std::cin>>k;
+		v.push_back(k);
+	}
+	
+	
+	
+	auto opadajuci = OpadajuciPodnizovi(v);
+	auto rastuci = RastuciPodnizovi(v);
+	std::cout<<"Maksimalni rastuci podnizovi: ";
+	std::cout<<std::endl;
+	IspisiMatricu(rastuci);
+	std::cout<<"Maksimalni opadajuci podnizovi: "<<std::endl;
+	IspisiMatricu(opadajuci);
+
+	return 0;
+}
+__________________________________________________________________________________________
+
+/* TP, 2016/2017, Zadaæa 1, Zadatak 4
+	
+	NAPOMENA: ulaz/izlaz za zadatke je specificiran
+	javnim autotestovima. Zalbe za ne analiziranje testova
+	se ne uvazavaju!
+	
+	NAPOMENA: nece svi (javni) testovi sa zamgera biti 
+	dostupni na c9.
+	
+*/
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <stdexcept>
+
+bool StringSamoSlova (std::string s){
+	for(int i=0; i<s.length(); i++)
+		if(s[i] < 'A' || s[i]>'z')
+			return false;
+	return true;
+}
+
+std::string FunkcijazaObrni(std::string s,std::string rijec){
+	int i(0), j(0);
+	std::string recenica(s);
+		while(i<recenica.length()){
+			j=0;
+			while(recenica[i]==rijec[j]){
+			i++;
+			j++;
+				if(j==rijec.length()-1 && recenica[i]==rijec[j]){
+					int poz=i-rijec.length()+1;
+						for(int p=0; p<rijec.length(); p++){
+						recenica[poz+p]=rijec[rijec.length()-1-p];
+						}
+					}
+			}
+			i++;
+		}
+	return recenica;
+}
+	
+	
+
+std::string ObrniFraze(std::string s,std::vector<std::string> rijeci){
+	std::string novarecenica(s);
+	
+		for(std::string rijec : rijeci){
+			novarecenica=FunkcijazaObrni(novarecenica,rijec);
+		}
+	return novarecenica;
+}
+
+std::string FunkcijazaPig(std::string s,std::string rijec){
+	int i(0), j(0);
+	std::string novarijec(rijec+rijec[0]+"ay");
+	std::string recenica(s);
+		while(i<recenica.length()){
+			j=0;
+			while(recenica[i]==rijec[j]){
+			i++;
+			j++;
+				if(j==rijec.length()-1 && recenica[i+1]== ' '){
+				int poz=i-rijec.length()+1;
+				recenica.insert(poz+rijec.length(), "   ");
+				
+						for(int p=0; p<novarijec.length(); p++){
+						recenica[poz+p]=novarijec[p+1];
+						} 
+						
+					}
+			}
+			i++;
+		}
+	return recenica;
+}
+
+std::string IzmijeniPigLatin (std::string s,std::vector<std::string> rijeci){
+	std::string novarecenica(s);
+	
+		for(std::string rijec : rijeci){
+			if(!(StringSamoSlova)) {
+				throw std::domain_error ("Nekorektan izbor rijeci.");}
+		novarecenica=FunkcijazaPig(novarecenica,rijec);
+		}
+	return novarecenica;
+}
+
+
+int main ()
+{	std::vector<std::string> vektorrijeci;
+	std::string recenica;
+	std::string rijec;
+	
+		std::cout<<"Unesite recenicu: ";
+		std::getline(std::cin,recenica);
+
+		std::cout<<"Unesite fraze: ";
+		
+	while(std::getline(std::cin,rijec)){
+			if(rijec == "") break;
+		vektorrijeci.push_back(rijec);
+	} 
+	
+	try{
+	std::cout<<"Recenica nakon PigLatin transformacije: "<<IzmijeniPigLatin(recenica, vektorrijeci);
+	
+	}
+	catch(std::domain_error e){
+		std::cout<<"Izuzetak: "<<e.what();
+	}
+	
+	try{
+	std::cout<<std::endl<<"Recenica nakon obrtanja fraza: "<<ObrniFraze(recenica, vektorrijeci);
+	}
+	catch(std::domain_error e){
+		std::cout<<"Izuzetak: "<<e.what();
+	}
+	
+	return 0;
+}
+_________________________________________________________________________________________
+
+/* TP, 16/17, Zadaæa 2, Zadatak 3
+	
+	NAPOMENA: i javni ATo-vi su dio postavke
+	
+	Autotestovi by Berina Cocalic. Sva pitanja, sugestije
+	i prijave gresaka saljite na mail: bcocalic1@etf.unsa.ba
+	
+*/
+
+#include <iostream>
+#include <deque>
+#include <iomanip>
+#include <algorithm>
+#include <set>
+#include <vector>
+
+long long int SumaDjelilaca(int n){
+	int suma(0);
+		for(int i=1; i<=n; i++){
+			if(n%i==0) suma+=i;
+		}
+	return suma;
+}
+
+long long int SumaDjelilacaBezPosljednjeg(int n){
+	int suma(0);
+		for(int i=1; i<n; i++){
+			if(n%i==0) suma+=i;
+		}
+	return suma;
+}
+
+bool Prost(int n){
+	int brojac(0);
+	for(int i=2; i<n; i++){
+		if((n%i)==0) 
+			brojac++;
+	}
+		if(brojac==0) return true;
+	return false;
+}
+
+long long int BrojProstihFaktora(int n){
+	int broj(0);
+		for(int i=2; i<=n; i++){
+			while(n%i==0){
+				n/=i;
+				broj++;
+			}
+		}
+	return broj;
+}
+
+bool Savrsen(int n){
+	if(SumaDjelilacaBezPosljednjeg(n)==n) return true;
+	return false;
+}
+
+long long int BrojSavrsenihDjelilaca(int n){
+	int brojac(0);
+		for(int i=2; i<n; i++){
+			if(n%i==0){
+				if(Savrsen(i)==true)
+					brojac++;
+			}
+		}
+	return brojac;
+}
+
+int SumaCifara(int n){
+	int suma(0);
+	int ostatak;
+	do{
+		ostatak=n%10;
+		suma+=ostatak;
+		n/=10;
+	} while(n!=0);
+
+	return suma;
+}
+
+template <typename Tip1, typename Tip2>
+bool DaLiSuJednaki(Tip1 n, Tip1 m, Tip2 *f(Tip2)){
+	if(f(n)!=f(m)) return false;
+return true;
+}
+
+template <typename NekiTip1,typename NekiTip2,typename NekiTip3, typename NekiTip4>
+	std::deque<std::deque<NekiTip3>> UvrnutiPresjek(NekiTip1 pok1,NekiTip1 pok2,NekiTip2 pok3,NekiTip2 pok4, NekiTip3 (*f)(NekiTip4)){
+
+	std::deque<std::deque<NekiTip3>> matrica(0);
+
+	for(auto i=pok1; i!=pok2; i++){
+		for(auto j=pok3; j!=pok4; j++){
+			if (f(*i)==f(*j)) {
+				std::deque<NekiTip3> v({*i, *j, f(*i)});
+				matrica.push_back(v);
+			}
+		}
+	}
+	
+	sort(matrica.begin(),matrica.end(), [](const std::deque<int> &v1, const std::deque<int> &v2)-> bool {
+		if(v1[2]<v2[2]) return true;
+		else if(v1[2]==v2[2])	
+			if(v1[0]<v2[0]) return true;
+			else if(v1[0]==v2[0])  return v1[1]<v2[1];
+		});
+return matrica;
+}
+
+template <typename NekiTip1,typename NekiTip2,typename NekiTip3,typename NekiTip4>
+	std::deque<std::deque<NekiTip3>> UvrnutaRazlika (NekiTip1 pok1, NekiTip1 pok2, NekiTip2 pok3, NekiTip2 pok4, NekiTip3 (*f)(NekiTip4)){
+		
+		std::deque<std::deque<NekiTip3>> matrica(0);
+		
+		for(auto i=pok1; i!=pok2; i++){
+			bool NalaziSe=false;
+			for(auto j=pok3; j != pok4; j++){
+				if(f(*i)==f(*j)) {
+					NalaziSe=true;
+					break;
+				}
+			}
+			if(NalaziSe==false){
+				std::deque<NekiTip3> v({*i, f(*i)});
+				matrica.push_back(v);
+			}
+		}
+		
+		for(auto i=pok3; i!=pok4; i++){
+			bool NalaziSe=false;
+			for(auto j=pok1; j != pok2; j++){
+				if(f(*i)==f(*j)) {
+					NalaziSe=true;
+					break;
+				}
+			}
+			if(NalaziSe==false){
+				std::deque<NekiTip3> v({*i, f(*i)});
+				matrica.push_back(v);
+			}
+		}
+	
+	return matrica;		
+}
+
+int main (){
+	
+	std::set<int> v,d;
+	int n,m;
+	std::cout<<"Unesite broj elemenata prvog kontejnera: ";
+	std::cin>>n;
+	std::cout<<"Unesite elemente prvog kontejnera: ";
+	for (int i=0; v.size()!=n; i++){
+		int a;
+		std::cin>>a;
+		v.insert(a);
+	}
+	
+	
+//	std::cin.clear();
+//	std::cin.ignore(1000,'\n');
+	
+	std::cout<<"Unesite broj elemenata drugog kontejnera: ";
+	std::cin>>m;
+	std::cout<<"Unesite elemente drugog kontejnera: ";
+	for(int j=0; d.size()!=m; j++){
+		int b;
+		std::cin>>b;
+		d.insert(b);
+	}
+	
+	std::cout<<"Uvrnuti presjek kontejnera:"<<std::endl;
+	
+	auto a(UvrnutiPresjek(v.begin(),v.end(),d.begin(),d.end(), SumaCifara));
+	
+	for(int i=0; i<a.size(); i++){
+		for(int j=0; j<a[i].size(); j++){
+			std::cout<<std::setw(6)<<a[i][j]<<" ";
+		}
+	std::cout<<std::endl;
+	}
+	
+	auto b( UvrnutaRazlika (v.begin(),v.end(),d.begin(),d.end(), BrojProstihFaktora));
+	
+	std::cout<<"Uvrnuta razlika kontejnera:"<<std::endl;
+
+	for(int i=0; i<b.size(); i++){
+		for(int j=0; j<b[i].size(); j++){
+			std::cout<<std::setw(6)<<b[i][j]<<" ";
+		}
+	std::cout<<std::endl;
+	}
+
+	std::cout<<"Dovidjenja!";
+
+	return 0;
+	
+	
+}
+___________________________________________________________________________________________
+//TP 2016/2017: Zadaæa 3, Zadatak 1
+//Autotestovi by Enil Pajic (epajic1@etf.unsa.ba)
+
+#include <iostream>
+#include <vector>
+#include <utility>
+#include <stdexcept>
+#include <algorithm>
+#include <cmath>
+#include <functional>
+
+
+double xsinx (double x){
+    return x*x+std::sin(x);
+}
+
+std::function<double(double)> BaricentricnaInterpolacija (std::vector<std::pair<double,double> > Par, int d){
+
+    if(d<0 || d>Par.size()) throw std::domain_error("Nedozvoljen red");
+    
+    for(int i(0); i<Par.size();i++){
+    for(int j(0);j<Par.size();j++){
+    if(fabs(Par[i].first-Par[j].first)<0) throw std::domain_error("Neispravni cvorovi");
+    }}
+    
+    std::vector<double> w;
+    for(int i(1); i<=(int)Par.size(); i++){
+        double s(0);
+        double a(std::max(1,i-d));
+        double b(std::min(i,(int)Par.size()-d));
+            for(int k(a); k<=b; k++){
+                double p(1);
+                for(int j(k); j<=k+d; j++){
+                    if (i == j) continue;
+                p*=1.0/(Par[i-1].first-Par[j-1].first);
+            }
+            if((k-1)%2 == 0)
+                s+=p;
+            else 
+                s-=p;
+        }
+        w.push_back(s);
+    }
+    
+    auto f = [w,Par] (double x)->double {
+        double suma1(0),suma2(0);
+    
+        for(int i=0; i<Par.size(); i++){
+            if(fabs(x-Par[i].first)<1e-4) return Par[i].second;
+          suma1+=w[i]*Par[i].second/(x-Par[i].first);
+        }
+        for(int i=0; i<Par.size(); i++){
+            if(fabs(x-Par[i].first)<1e-4) return Par[i].second;
+            suma2+=w[i]/(x-Par[i].first);
+        }
+        return suma1/suma2;
+    };
+    return f;
+
+}
+
+std::function<double(double)> BaricentricnaInterpolacija(std::function<double(double)> f, double xmin, double xmax, double deltax, int d){
+
+    if(xmax<xmin || deltax<=0) throw std::domain_error("Nekorektni parametri");
+    
+    std::vector<std::pair<double,double>> parovi;
+    for(auto x=xmin; x<xmax; x+=deltax){
+        std::pair<double,double> par;
+        par.first = x; par.second = f(x);
+        parovi.push_back(par);
+
+    }
+    auto f1 = BaricentricnaInterpolacija(parovi, d);
+    
+    return f1;
+
+}
+int main ()
+{  try{
+    int n;
+    std::vector<std::pair<double,double>> vektorcvorova;
+    std::cout<<"Odaberite opciju (1 - unos cvorova, 2 - aproksimacija): ";
+    std::cin>>n;
+    switch(n){
+        case 1: {
+                std::cout<<"Unesite broj cvorova: ";
+                int a;
+                std::cin>>a;
+                std::cout<<"Unesite cvorove kao parove x y: ";
+                std::pair<double,double> cvor;
+                for(int i=0; i<a; i++){
+                 std::cin>>cvor.first;
+                 std::cin>>cvor.second;
+                 vektorcvorova.push_back(cvor);
+                }
+                
+                std::cout<<"Unesite red interpolacije: ";
+                int b;
+                std::cin>>b;
+              
+               
+                for(;;){
+                    double arg;
+                    std::cout<<"Unesite argument (ili \"kraj\" za kraj): ";
+                    std::cin>>arg;
+                    if(!std::cin) break; 
+                    auto f(BaricentricnaInterpolacija(vektorcvorova,b));
+                    std::cout<<"f("<<arg<<") = "<<f(arg)<<std::endl;
+                }
+                return 0;
+        } 
+                
+        case 2: {
+                double i1,i2,k,red;
+                std::cout<<"Unesite krajeve intervala i korak: ";
+                std::cin>>i1>>i2>>k;
+                std::cout<<"Unesite red interpolacije: ";
+                std::cin>>red;
+                
+                for(;;){
+                    double arg;
+                    std::cout<<"Unesite argument (ili \"kraj\" za kraj): ";
+                    std::cin>>arg;
+                    if(!std::cin) break;
+                    
+                    auto fun = [](double x) {return x*x + std::sin(x); };
+                    auto f(BaricentricnaInterpolacija(xsinx,i1,i2,k,red));
+        
+                  std::cout<<"f("<<arg<<") = "<<fun(arg)<<" fapprox("<<arg<<") = "<<f(arg)<<std::endl;
+                }
+                return 0;
+        }
+    }
+}
+catch(std::domain_error e){
+    std::cout<<e.what();
+}
+	return 0;
+}
+_________________________________________________________________________________________
+
+//TP 2016/2017: Zadaæa 3, Zadatak 2
+#include <iostream>
+#include <string>
+#include <map>
+#include <vector>
+#include <stdexcept>
+#include <set>
+#include <algorithm>
+#include <iterator>
+#include <cstring>
+#include <cctype>
+
+bool DaLiJeIspravan(char c){
+  
+    if ((c>='A' && c<='z') || (c>='0' && c<='9') ) return true;
+    else return false;
+ 
+}
+
+std::string malaslova(std::string rijec){
+    std::string rez(rijec);
+    for(int i=0; i<rijec.length();i++){
+        rez[i]=std::tolower(rijec[i]);
+    }
+    return rez;
+}
+
+
+void IspisiIndeksPojmova(std::map<std::string,std::set<int>> mapa){
+    for(auto it=mapa.begin(); it!=mapa.end(); it++){
+        std::cout<<it->first<<": ";
+            for(auto it2=it->second.begin(); it2!=it->second.end(); it2++){
+            if(it2==it->second.begin())
+                std::cout<<*it2;
+            else
+                std::cout<<","<<*it2;
+    }
+    std::cout<<std::endl;
+}
+}
+
+
+std::map<std::string,std::set<int>>  KreirajIndeksPojmova(std::string text){
+    std::map<std::string,std::set<int>> Mapa;
+    std::vector<std::string> rijeci;
+    std::vector<int> v;
+
+ 
+    for(int i=0; i<text.length();i++) 
+    {
+       std::string rijec1;
+        int pozicija=i;
+        while(DaLiJeIspravan(text[i])){
+            rijec1+=text[i];
+            i++;
+        }
+        if (rijec1!="")  Mapa[malaslova(rijec1)].insert(pozicija);
+        
+    }
+    
+    return Mapa;
+}
+
+std::set<int> PretraziIndeksPojmova(std::string rijec, std::map<std::string, std::set<int>> Mapica){
+
+   
+    auto k(malaslova(rijec));
+    auto it(Mapica.find(k));
+    if (it == Mapica.end() )
+        throw std::logic_error("Pojam nije nadjen");
+    return Mapica[k];
+
+}
+
+int main ()
+{
+    std::string textic,rijec;
+    std::vector<int> v;
+    std::vector<std::string> s;
+    std::cout<<"Unesite tekst: ";
+    std::getline(std::cin,textic);
+    
+  auto d=KreirajIndeksPojmova(textic);
+    IspisiIndeksPojmova(d);
+    
+    for(;;){
+        std::cout<<"Unesite rijec: ";
+        std::getline(std::cin,rijec);
+        if(rijec==".") break;
+    
+        try {
+            auto pre=PretraziIndeksPojmova(rijec,d);
+            for(int x : pre) std::cout<<x<<" ";
+            std::cout<<std::endl;
+        }
+        catch(std::logic_error e)  {
+            std::cout << "Unesena rijec nije nadjena!"<<std::endl;
+        }
+        
+    }
+	return 0;
+}
+__________________________________________________________________________________________
+//TP 2016/2017: Zadaæa 3, Zadatak 3
+#include <iostream>
+#include <iomanip>
+#include <stdexcept>
+#include <new>
+#include <vector>
+
+template <typename TipElemenata>
+    struct Matrica{
+      int br_redova,br_kolona;  
+    TipElemenata **elementi=nullptr;
+    };
+
+template <typename TipElemenata>
+    void UnistiMatricu(Matrica<TipElemenata> mat){
+        if(!mat.elementi) return;
+        for(int i=0; i<mat.br_redova; i++) delete[] mat.elementi[i];
+        delete[] mat.elementi;
+        mat.elementi=nullptr;
+    }
+    
+template <typename TipElemenata>
+    Matrica<TipElemenata> StvoriMatricu(int br_redova, int br_kolona){
+        Matrica<TipElemenata> mat;
+        mat.br_redova=br_redova; mat.br_kolona=br_kolona;
+        mat.elementi=new TipElemenata*[br_redova];
+        for(int i=0; i<br_redova; i++) mat.elementi[i]=nullptr;
+        try{
+            for(int i=0; i<br_redova;i++)
+                mat.elementi[i]=new TipElemenata[br_kolona];
+        }
+        catch(...){
+            UnistiMatricu(mat);
+            throw;
+        }
+        return mat;
+    }
+    
+template <typename TipElemenata>
+    void UnesiMatricu(char ime_matrice, Matrica<TipElemenata> &mat){
+        for(int i=0; i<mat.br_redova; i++)
+            for(int j=0; j<mat.br_kolona; j++){
+                std::cout<<ime_matrice<<"("<<i+1<<","<<j+1<<") = ";
+                    std::cin>>mat.elementi[i][j];
+            }
+    }
+
+template <typename TipElemenata>
+    void IspisiMatricu(Matrica<TipElemenata> &mat, int sirina_ispisa=10,int preciznost=6, bool treba_brisati=false){
+        for(int i=0; i<mat.br_redova; i++){
+            for(int j=0; j<mat.br_kolona; j++)
+                std::cout<<std::setw(sirina_ispisa)<<std::setprecision(preciznost)<<mat.elementi[i][j];
+            std::cout<<std::endl;
+        }
+        
+        if(treba_brisati)   UnistiMatricu(mat) ;
+    }
+ 
+template <typename TipElemenata>
+    Matrica<TipElemenata> ZbirMatrica(const Matrica<TipElemenata> &m1, const Matrica<TipElemenata> &m2){
+        if(m1.br_redova != m2.br_redova || m1.br_kolona!=m2.br_kolona)
+            throw std::domain_error("Matrice nemaju jednake dimenzije!");
+        auto m3(StvoriMatricu<TipElemenata>(m1.br_redova,m1.br_kolona));
+        for(int i=0; i<m1.br_redova;i++)
+            for(int j=0; j<m1.br_kolona; j++)
+            m3.elementi[i][j]=m1.elementi[i][j]+m2.elementi[i][j];
+    return m3;
+    }
+    
+template <typename TipElemenata>
+    Matrica<TipElemenata> ProduktMatrica(const Matrica<TipElemenata> &m1,const Matrica<TipElemenata> &m2){
+        if(m1.br_kolona != m2.br_redova)
+            throw std::domain_error("Matrice nisu saglasne za mnozenje");
+        auto m3(StvoriMatricu<TipElemenata>(m1.br_redova,m2.br_kolona));
+       // m3{};
+        for(int i=0; i<m1.br_redova; i++)
+            for(int j=0; j<m2.br_kolona; j++){
+                m3.elementi[i][j]={};
+                    for(int k=0; k<m2.br_redova; k++) m3.elementi[i][j]+=m1.elementi[i][k]*m2.elementi[k][j];
+            }
+        return m3;
+    }
+    
+template <typename TipElemenata>
+    Matrica<TipElemenata> ProduktMatricaSkalar(const Matrica<TipElemenata> &m1,const TipElemenata &v){
+     
+        Matrica<TipElemenata> m3(StvoriMatricu<TipElemenata>(m1.br_redova,m1.br_kolona));
+        for(int i=0; i<m1.br_redova; i++)
+            for(int j=0; j<m1.br_kolona; j++)
+                m3.elementi[i][j]=m1.elementi[i][j]*v;
+                
+            
+        return m3;
+    }
+    
+template <typename TipElemenata> 
+    Matrica<TipElemenata> MatricniPolinom(const Matrica<TipElemenata> &A,std::vector<double> v){
+            if(A.br_redova!=A.br_kolona)
+                throw std::domain_error("Matrica mora biti kvadratna");
+        auto mat(StvoriMatricu<TipElemenata>(A.br_redova,A.br_kolona));
+        auto jedinicnamatrica(StvoriMatricu<TipElemenata>(A.br_redova,A.br_kolona));
+        auto pomocna(StvoriMatricu<TipElemenata>(A.br_redova,A.br_kolona));
+        auto mnozenje(StvoriMatricu<TipElemenata>(A.br_redova,A.br_kolona));
+        
+        auto nulamatrica(StvoriMatricu<TipElemenata>(A.br_redova,A.br_kolona));
+        for(int i=0; i<nulamatrica.br_redova;i++){
+            for(int j=0; j<nulamatrica.br_kolona; j++){
+                nulamatrica.elementi[i][j]=0;
+            }
+        }
+        
+        if(v.size()==0) {     
+            UnistiMatricu(pomocna); UnistiMatricu(mnozenje);UnistiMatricu(jedinicnamatrica); UnistiMatricu(mat);
+            return nulamatrica;
+        }
+        else{
+        for(int i=0; i<jedinicnamatrica.br_redova;i++){
+            for(int j=0; j<jedinicnamatrica.br_kolona; j++){
+                if(i==j) jedinicnamatrica.elementi[i][j]=1;
+                else jedinicnamatrica.elementi[i][j]=0;
+                
+                    mat.elementi[i][j]=0;
+                    pomocna.elementi[i][j]=A.elementi[i][j];
+            }
+        }
+            mat=ProduktMatricaSkalar(jedinicnamatrica,v[0]);
+            pomocna=ProduktMatrica(jedinicnamatrica,A);
+            
+            for(int i=1; i<v.size();i++){
+                mnozenje=ProduktMatricaSkalar(pomocna,v[i]);
+                pomocna=ProduktMatrica(pomocna,A);
+                mat=ZbirMatrica(mat,mnozenje);
+            }
+          
+            UnistiMatricu(pomocna); UnistiMatricu(mnozenje);UnistiMatricu(jedinicnamatrica); UnistiMatricu(nulamatrica);
+        }
+        return mat;
+    }
+    
+int main ()
+{
+    Matrica<double> a,c;
+    std::vector<double> v(0);
+    int m(0),n(0);
+    std::cout<<"Unesite dimenziju kvadratne matrice: ";
+    std::cin>>m;
+    try{
+        a=StvoriMatricu<double>(m,m);
+        c=StvoriMatricu<double>(m,m);
+        std::cout<<"Unesite elemente matrice A:\n";
+        UnesiMatricu('A',a);
+        std::cout<<"Unesite red polinoma: ";
+        std::cin>>n;
+        std::cout<<"Unesite koeficijente polinoma: ";
+        for(int i=0; i<n+1; i++){
+            double a(0);
+            std::cin>>a;
+            v.push_back(a);
+        }
+        
+       c=MatricniPolinom<double>(a,v);
+       IspisiMatricu(c,10,6);
+        
+    }
+
+    catch(std::bad_alloc){
+        std::cout<<"Nema dovoljno memorije!\n";
+    }
+    
+    UnistiMatricu(a);UnistiMatricu(c);
+	return 0;
+}
+_________________________________________________________________________________________
+
+//TP 2016/2017: Zadaæa 3, Zadatak 4
+#include <iostream>
+#include <string>
+#include <vector>
+#include <list>
+#include <algorithm>
+#include <set>
+#include <cmath>
+#include <stdexcept>
+
+void Ispisi(std::vector<std::set<std::string>> vektor) {
+for(int i=0; i<vektor.size();i++){
+           std::cout<<"Tim "<<i+1<<": ";
+            for(auto it=vektor[i].begin(); it!=vektor[i].end(); ++it){
+               if(it!=vektor[i].begin())
+               std::cout<<", "<<*it;
+               else std::cout<<*it;
+            }
+            std::cout<<std::endl;
+            
+        }
+}
+
+int DuzinaImena(std::string ime){
+    
+    int broj_slova(0);
+    for(int i=0; i<ime.size();i++)
+        if((ime[i]>='A' && ime[i]<='z') || (ime [i]>='0' && ime[i]<='9')) broj_slova++;
+        return broj_slova;
+}
+
+std::vector<std::set<std::string>> Razvrstavanje(std::vector<std::string> imenadjece, int broj_timova){
+std::vector<std::set<std::string>> parovi(broj_timova);
+std::list<std::string> lista;
+std::copy(imenadjece.begin(), imenadjece.end(), std::back_inserter(lista));
+//std::cout<<broj_timova;
+if(broj_timova<=1 || broj_timova>imenadjece.size()) throw std::logic_error("Razvrstavanje nemoguce");
+
+    int n=imenadjece.size();
+    int b(n%broj_timova);
+    auto iter=lista.begin();
+    std::set<std::string> tim;
+    int brTima=0;
+            //prolazimo kroz citavu listu
+            while(lista.begin()!=lista.end()){
+                std::string temp(*iter);
+                tim.insert(*iter);
+                 //ako dodjemo do kraja, vracamo iterator na pocetak
+                if(iter==lista.end()) {
+                    iter=lista.begin();
+                }
+                  iter=lista.erase(iter);
+                if(iter==lista.end()) {
+                    iter=lista.begin();
+                }
+                     //provjeravamo ostatke, ukoliko je ostatak veæi od nula
+                        if(brTima<b){
+                            if(tim.size()==int (n/broj_timova)+1) {
+                            parovi[brTima]=tim;
+                            brTima++;
+                            tim.clear();
+                        }     
+                        }
+                        else {
+                            if(tim.size()==int (n/broj_timova)){
+                                parovi[brTima]=tim;
+                                brTima++;
+                                tim.clear();
+                                
+                            }
+                            
+                        }
+                        
+                for(int i=1; i<DuzinaImena(temp);i++){
+                    iter++;
+                    if(iter==lista.end()) {
+                        iter=lista.begin();
+                    }
+                    if(lista.size()==0) break;
+                }
+                            
+            }
+        
+    
+return parovi;
+}
+
+int main ()
+{ try{
+    int n(0),br_timova(0);
+    std::vector<std::string> v;
+    std::string ime;
+    std::cout<<"Unesite broj djece: ";
+    std::cin>>n;
+    std::cout<<"Unesite imena djece: ";
+    for(int i=0; i<n; i++){
+        std::getline(std::cin,ime);
+        if(ime==""){
+        i--;
+        continue;
+        
+    }
+        v.push_back(ime);
+
+    }
+
+    std::cout<<std::endl<<"Unesite broj timova: ";
+    std::cin>>br_timova;
+        
+        
+    auto vektor=Razvrstavanje(v,br_timova);
+    
+    //std::cout<<br_timova;
+    Ispisi(vektor);
+        
+        
+        /*
+        std::vector<std::string> imena({"Damir","Ana","Muhamed","Marko","Ivan","Mirsad","Nikolina","Alen","Jasmina","Merima"});
+        std::vector<std::set<std::string>> timovi =Razvrstavanje(imena,3);
+        Ispisi(timovi);*/
+        
+        
+	return 0;
+}
+catch(std::logic_error e){
+    std::cout<<"Izuzetak: "<<e.what();
+}
+}
+
+___________________________________________________________________________________________
+
+//TP 2016/2017: Zadaæa 3, Zadatak 5
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <cmath>
+#include <stdexcept>
+
+struct Dijete{
+  std::string ime;
+  Dijete *sljedeci;
+};
+
+int Duzinarijeci(std::string s){
+    int brojac(0);
+    for (int i=0; i<s.size(); i++){
+        if((s[i]>='A' && s[i]<='z') || (s[i]>='0' && s[i]<='9')) brojac++;
+    }
+    return brojac;
+}
+
+void Ispisi(std::vector<std::set<std::string>> vektor) {
+for(int i=0; i<vektor.size();i++){
+           std::cout<<"Tim "<<i+1<<": ";
+            for(auto it=vektor[i].begin(); it!=vektor[i].end(); ++it){
+               if(it!=vektor[i].begin())
+               std::cout<<", "<<*it;
+               else std::cout<<*it;
+            }
+            std::cout<<std::endl;
+            
+        }
+}
+
+
+std::vector<std::set<std::string>> Razvrstavanje(std::vector<std::string> imenadjece, int broj_timova){
+std::vector<std::set<std::string>> parovi(broj_timova);
+
+if(broj_timova<=0 || broj_timova>imenadjece.size()) throw std::logic_error("Razvrstavanje nemoguce");
+
+Dijete *pocetak(nullptr);
+Dijete *prethodni;
+        for(int i=0; i<imenadjece.size();i++){
+            Dijete *novi=new Dijete;
+            novi->ime=imenadjece[i];
+            novi->sljedeci=nullptr;
+                if(i==imenadjece.size()-1) novi->sljedeci=pocetak;
+                if(!pocetak) pocetak=novi;
+                else prethodni->sljedeci=novi;
+                prethodni=novi;
+        }
+
+    int n=imenadjece.size();
+    int b=n%broj_timova;
+    auto iter=pocetak;
+    std::set<std::string> tim;
+    int brTima=0;
+            //prolazimo kroz citavu listu
+            while(iter!=nullptr){
+                std::string temp(iter->ime);
+                tim.insert(iter->ime);
+                
+                    if(iter->sljedeci == prethodni){
+                        iter->sljedeci=nullptr;
+                        
+                            if(tim.size()==int(n/broj_timova)){
+                                parovi[brTima]=tim;
+                                tim.clear();
+                                brTima++;
+                            }
+                        
+                        tim.insert(prethodni->ime);
+                        parovi[brTima]=tim;
+                        tim.clear();
+                    
+                     prethodni->sljedeci=nullptr; 
+                     iter->sljedeci=nullptr;
+                     pocetak=nullptr;
+                     delete prethodni;
+                     delete iter;
+                     delete pocetak;
+                     break;
+                        }
+                        
+                
+                    prethodni->sljedeci=iter->sljedeci;
+                    Dijete *temp_dijete=iter;
+                    iter=iter->sljedeci;
+                    delete temp_dijete;
+                
+                
+                     //provjeravamo ostatke, ukoliko je ostatak veæi od nula
+                        if(brTima<b){
+                            if(tim.size()==int (n/broj_timova)+1) {
+                            parovi[brTima]=tim;
+                            brTima++;
+                            tim.clear();
+                        }     
+                        }
+                        else {
+                            if(tim.size()==int (n/broj_timova)){
+                                parovi[brTima]=tim;
+                                brTima++;
+                                tim.clear();
+                                
+                            }
+                            
+                        }
+                   
+                for(int i=1; i<Duzinarijeci(temp); i++){
+                    prethodni=iter;
+                    iter=iter->sljedeci;
+                }
+                            
+            }
+        
+    
+return parovi;
+}
+
+int main ()
+{
+    try{
+    int n,br_timova;
+    std::vector<std::string> v;
+    std::string ime;
+    std::cout<<"Unesite broj djece: ";
+    std::cin>>n;
+    std::cout<<"Unesite imena djece: ";
+    for(int i=0; i<n; i++){
+        std::getline(std::cin,ime);
+        if(ime==""){
+            i--;
+            continue;
+        }
+        v.push_back(ime);
+
+    }
+    
+    std::cout<<std::endl<<"Unesite broj timova: ";
+    std::cin>>br_timova;
+        
+        
+    auto vektor=Razvrstavanje(v,br_timova);
+    
+    Ispisi(vektor);
+        /*
+        
+        std::vector<std::string> imena({"Damir","Ana","Muhamed","Marko","Ivan","Mirsad","Nikolina","Alen","Jasmina","Merima"});
+        std::vector<std::set<std::string>> timovi =Razvrstavanje(imena,3);
+        Ispisi(timovi);
+        */
+	return 0;
+        
+    }
+	catch(std::logic_error e){
+	    std::cout<<"Izuzetak: "<<e.what();
+	}
+}
+__________________________________________________________________________________________
+
+//TP 2016/2017: Zadaæa 3, Zadatak 6
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <set>
+#include <cmath>
+#include <memory>
+#include <stdexcept>
+
+struct Dijete{
+  std::string ime;
+  std::shared_ptr<Dijete> sljedeci;
+};
+
+int Duzinarijeci(std::string s){
+    int brojac(0);
+    for (int i=0; i<s.size(); i++){
+        if((s[i]>='A' && s[i]<='z') || (s[i]>='0' && s[i]<='9')) brojac++;
+    }
+    return brojac;
+}
+
+void Ispisi(std::vector<std::set<std::string>> vektor) {
+for(int i=0; i<vektor.size();i++){
+           std::cout<<"Tim "<<i+1<<": ";
+            for(auto it=vektor[i].begin(); it!=vektor[i].end(); ++it){
+               if(it!=vektor[i].begin())
+               std::cout<<", "<<*it;
+               else std::cout<<*it;
+            }
+            std::cout<<std::endl;
+            
+        }
+}
+
+
+std::vector<std::set<std::string>> Razvrstavanje(std::vector<std::string> imenadjece, int broj_timova){
+std::vector<std::set<std::string>> parovi(broj_timova);
+
+if(broj_timova<=1 || broj_timova>imenadjece.size()) throw std::logic_error("Razvrstavanje nemoguce");
+
+std::shared_ptr<Dijete> pocetak(nullptr);
+std::shared_ptr<Dijete> prethodni;
+        for(int i=0; i<imenadjece.size();i++){
+        std::shared_ptr<Dijete> novi(new Dijete);
+            novi->ime=imenadjece[i];
+            novi->sljedeci=nullptr;
+                if(i==imenadjece.size()-1) novi->sljedeci=pocetak;
+                if(!pocetak) pocetak=novi;
+                else prethodni->sljedeci=novi;
+                prethodni=novi;
+        }
+
+    int n=imenadjece.size();
+    int b=n%broj_timova;
+    auto iter=pocetak;
+    std::set<std::string> tim;
+    int brTima=0;
+            //prolazimo kroz citavu listu
+            while(iter!=nullptr){
+                std::string temp(iter->ime);
+                tim.insert(iter->ime);
+                
+                    if(iter->sljedeci == prethodni){
+                        iter->sljedeci=nullptr;
+                        
+                            if(tim.size()==int(n/broj_timova)){
+                                parovi[brTima]=tim;
+                                tim.clear();
+                                brTima++;
+                            }
+                        
+                        tim.insert(prethodni->ime);
+                        parovi[brTima]=tim;
+                        tim.clear();
+                    
+                     prethodni->sljedeci=nullptr; 
+                     iter->sljedeci=nullptr;
+                     pocetak=nullptr;
+                     break;
+                        }
+                        
+                
+                    prethodni->sljedeci=iter->sljedeci;
+                    std::shared_ptr<Dijete> temp_dijete=iter;
+                    iter=iter->sljedeci;
+                
+                
+                     //provjeravamo ostatke, ukoliko je ostatak veæi od nula
+                        if(brTima<b){
+                            if(tim.size()==int (n/broj_timova)+1) {
+                            parovi[brTima]=tim;
+                            brTima++;
+                            tim.clear();
+                        }     
+                        }
+                        else {
+                            if(tim.size()==int (n/broj_timova)){
+                                parovi[brTima]=tim;
+                                brTima++;
+                                tim.clear();
+                                
+                            }
+                            
+                        }
+                   
+                for(int i=1; i<Duzinarijeci(temp); i++){
+                    prethodni=iter;
+                    iter=iter->sljedeci;
+                }
+                            
+            }
+        
+    
+return parovi;
+}
+
+int main ()
+{
+    try{
+    int n(0),br_timova(0);
+    std::vector<std::string> v;
+    std::string ime;
+    std::cout<<"Unesite broj djece: ";
+    std::cin>>n;
+    std::cout<<"Unesite imena djece: ";
+    for(int i=0; i<n; i++){
+        std::getline(std::cin,ime);
+        if(ime==""){
+            i--;
+            continue;
+        }
+        v.push_back(ime);
+
+    }
+    
+    std::cout<<std::endl<<"Unesite broj timova: ";
+    std::cin>>br_timova;
+        
+        
+    auto vektor=Razvrstavanje(v,br_timova);
+    
+    Ispisi(vektor);
+        /*
+        
+        std::vector<std::string> imena({"Damir","Ana","Muhamed","Marko","Ivan","Mirsad","Nikolina","Alen","Jasmina","Merima"});
+        std::vector<std::set<std::string>> timovi =Razvrstavanje(imena,3);
+        Ispisi(timovi);
+        */
+	return 0;
+    }
+    catch(std::logic_error e){
+        std::cout<<"Izuzetak: "<<e.what();
+    }
+}
+
+_________________________________________________________________________________________
+
+//TP, 2016/2017, Zadaæa 4, Zadatak 1
+//Napomena: testovi ce biti dostupni dan pred rok!
+
+#include <iostream>
+#include <cmath>
+#include <utility>
+#include <stdexcept>
+#include <memory>
+#include <algorithm>
+#include <vector> 
+const double eps = 1e-10;
+const double PI = 4*atan(1);
+
+typedef std::pair<double,double> Tacka;
+
+class Trougao{
+         Tacka t1,t2,t3;
+         
+         static double koordinate(const Tacka &t1,const Tacka &t2,const Tacka &t3){
+             return t1.first*(t2.second-t3.second)-t2.first*(t1.second-t3.second)+t3.first*(t1.second-t2.second);
+         }
+
+        double duzina_stranice23() const{
+            return std::sqrt((t2.first-t3.first)*(t2.first-t3.first)+(t2.second-t3.second)*(t2.second-t3.second));}
+        double duzina_stranice31() const{
+            return std::sqrt((t3.first-t1.first)*(t3.first-t1.first)+(t3.second-t1.second)*(t3.second-t1.second));}
+        double duzina_stranice12() const{
+            return std::sqrt((t1.first-t2.first)*(t1.first-t2.first)+(t1.second-t2.second)*(t1.second-t2.second));}
+        
+        double ugaoalfa() const{
+             return acos ((duzina_stranice12()*duzina_stranice12()+duzina_stranice31()*duzina_stranice31()
+                            -duzina_stranice23()*duzina_stranice23())/(2*duzina_stranice12()*duzina_stranice31()));
+        }
+        double ugaobeta() const{
+             return acos ((duzina_stranice12()*duzina_stranice12()-duzina_stranice31()*duzina_stranice31()
+                            +duzina_stranice23()*duzina_stranice23())/(2*duzina_stranice12()*duzina_stranice23()));
+        }
+        double ugaogamma() const{
+             return acos ((-duzina_stranice12()*duzina_stranice12()+duzina_stranice31()*duzina_stranice31()
+                            +duzina_stranice23()*duzina_stranice23())/(2*duzina_stranice23()*duzina_stranice31()));
+        }
+    public:
+
+        Trougao(const Tacka &t1, const Tacka &t2, const Tacka &t3){
+
+             auto k=Orijentacija(t1,t2,t3);
+             if(k==0) throw std::domain_error("Nekorektne pozicije tjemena");
+                          Trougao::t1=t1;    Trougao::t2=t2;    Trougao::t3=t3;
+        }
+        
+
+        void Postavi (const Tacka &t1, const Tacka &t2, const Tacka &t3){
+        auto k=Orijentacija(t1,t2,t3);
+             if(k==0) throw std::domain_error("Nekorektne pozicije tjemena");
+         Trougao::t1=t1;    Trougao::t2=t2;    Trougao::t3=t3;
+        }
+
+        void Postavi (int indeks, const Tacka &t){
+             if(indeks==1)   Trougao::t1=t1;    
+             else if(indeks==2)   Trougao::t2=t2;    
+             else if(indeks==3)   Trougao::t3=t3;
+             else throw std::range_error("Nekorektan indeks");
+        }
+
+
+        static int Orijentacija (const Tacka &t1, const Tacka &t2, const Tacka &t3){
+            double a=koordinate(t1,t2,t3);
+            if (a<0) return -1;
+            else if (a>0) return 1;
+            else 
+            return 0;
+        }
+
+
+        Tacka DajTjeme (int indeks) const{
+            if (indeks==1) return t1;
+            else if (indeks==2) return t2;
+            else if (indeks==3) return t3;
+            else throw std::range_error("Nekorektan indeks");
+        }
+
+
+        double DajStranicu (int indeks) const{
+            if (indeks==1)  return duzina_stranice23();
+            else if (indeks==2)  return duzina_stranice31();
+            else if (indeks==3)  return duzina_stranice12();
+            else throw std::range_error("Nekorektan indeks");
+        }
+        
+        double DajUgao (int indeks) const{
+            if(indeks==1){ return ugaoalfa();}
+            else if(indeks==2){ return ugaobeta();}
+            else if(indeks==3){ return ugaogamma();}
+            else throw std::range_error("Nekorektan indeks");
+            
+        }
+        
+        Tacka DajCentar () const{
+            Tacka tt;
+            tt.first=(t1.first+t2.first+t3.first)/3;
+            tt.second=(t1.second+t2.second+t3.second)/3;
+            return tt;
+        }
+
+        double DajObim () const{
+            return duzina_stranice12()+duzina_stranice23()+duzina_stranice31();
+            
+        }
+
+        double DajPovrsinu () const{
+            return fabs(koordinate(t1,t2,t3))*(1./2);
+        }
+
+
+        bool DaLiJePozitivnoOrijentisan() const{
+            auto a=Orijentacija(t1,t2,t3);
+            if (a>0 ) return true;
+            else return false;
+        }
+
+
+        bool DaLiJeUnutra (const Tacka &t) const{
+            if((Orijentacija(t,t1,t2)==1) && (Orijentacija(t,t2,t3)==1) && (Orijentacija(t,t1,t3)==1)) return true;
+            return false;
+        }
+
+        void Ispisi () const{
+            std::cout<<"(("<<t1.first<<","<<t1.second<<"),("<<t2.first<<","<<t2.second<<"),("<<t3.first
+                     <<","<<t3.second<<"))";
+        }
+
+        void Transliraj (double delta_x,double delta_y){
+            t1.first=t1.first+delta_x;
+            t2.first=t2.first+delta_x;
+            t3.first=t3.first+delta_x;
+            t1.second=t1.second+delta_y;
+            t2.second=t2.second+delta_y;
+            t3.second=t3.second+delta_y;
+        }
+        
+     
+        void Centriraj (const Tacka &t){
+            Tacka tt=DajCentar();
+            
+            tt.first=tt.first+t.first;
+            tt.second=tt.second+t.second;
+            
+            t1.first=t1.first+tt.first;
+            t2.first=t2.first+tt.first;
+            t3.first=t3.first+tt.first;
+            t1.second=t1.second+tt.second;
+            t2.second=t2.second+tt.second;
+            t3.second=t3.second+tt.second;
+        }
+
+
+        void Rotiraj(const Tacka &t, double ugao){
+            t1.first=t.first+(t1.first-t.first)*cos(ugao)-(t1.second-t.second)*sin(ugao);
+            t2.first=t.first+(t2.first-t.first)*cos(ugao)-(t2.second-t.second)*sin(ugao);
+            t3.first=t.first+(t3.first-t.first)*cos(ugao)-(t3.second-t.second)*sin(ugao);
+            t1.second=t.second+(t1.first-t.first)*sin(ugao)+(t1.second-t.second)*cos(ugao);
+            t2.second=t.second+(t2.first-t.first)*sin(ugao)+(t2.second-t.second)*cos(ugao);
+            t3.second=t.second+(t3.first-t.first)*sin(ugao)+(t3.second-t.second)*cos(ugao);
+        }
+
+        void Skaliraj(const Tacka &t, double faktor){
+            if(faktor>0){
+                t1.first=t.first+faktor*(t1.first-t.first);
+                t2.first=t.first+faktor*(t2.first-t.first);
+                t3.first=t.first+faktor*(t3.first-t.first);
+                t1.second=t.second+faktor*(t1.second-t.second);
+                t2.second=t.second+faktor*(t2.second-t.second);
+                t3.second=t.second+faktor*(t3.second-t.second);
+        }
+            else if (faktor<0){ 
+                t1.first=t.first+faktor*(t1.first-t.first);
+                t2.first=t.first+faktor*(t2.first-t.first);
+                t3.first=t.first+faktor*(t3.first-t.first);
+                t1.second=t.second+faktor*(t1.second-t.second);
+                t2.second=t.second+faktor*(t2.second-t.second);
+                t3.second=t.second+faktor*(t3.second-t.second);
+                Rotiraj(PI);
+            }
+            else throw std::domain_error ("Nekorektan faktor skaliranja");
+        }
+        
+        
+        void Rotiraj(double ugao){
+            Tacka tt=DajCentar();
+         
+            double x1=tt.first+(t1.first-tt.first)*cos(ugao)-(t1.second-tt.second)*sin(ugao);
+            double x2=tt.first+(t2.first-tt.first)*cos(ugao)-(t2.second-tt.second)*sin(ugao);
+            double x3=tt.first+(t3.first-tt.first)*cos(ugao)-(t3.second-tt.second)*sin(ugao);
+            double y1=tt.second+(t1.first-tt.first)*sin(ugao)+(t1.second-tt.second)*cos(ugao);
+            double y2=tt.second+(t2.first-tt.first)*sin(ugao)+(t2.second-tt.second)*cos(ugao);
+            double y3=tt.second+(t3.first-tt.first)*sin(ugao)+(t3.second-tt.second)*cos(ugao);
+            
+            t1.first=x1; t2.first=x2; t3.first=x3;
+            t1.second=y1; t2.second=y2; t3.second=y3;
+            
+        }
+        
+        void Skaliraj(double faktor){
+            Tacka tt=DajCentar();
+            
+            if(faktor>0){
+                t1.first=tt.first+faktor*(t1.first-tt.first);
+                t2.first=tt.first+faktor*(t2.first-tt.first);
+                t3.first=tt.first+faktor*(t3.first-tt.first);
+                t1.second=tt.second+faktor*(t1.second-tt.second);
+                t2.second=tt.second+faktor*(t2.second-tt.second);
+                t3.second=tt.second+faktor*(t3.second-tt.second);
+        }
+            else if (faktor<0){
+                t1.first=tt.first+faktor*(t1.first-tt.first);
+                t2.first=tt.first+faktor*(t2.first-tt.first);
+                t3.first=tt.first+faktor*(t3.first-tt.first);
+                t1.second=tt.second+faktor*(t1.second-tt.second);
+                t2.second=tt.second+faktor*(t2.second-tt.second);
+                t3.second=tt.second+faktor*(t3.second-tt.second);
+                Rotiraj(PI);
+            }
+            else throw std::domain_error ("Nekorektan faktor skaliranja");
+        }
+
+friend bool DaLiSuIdenticni(const Trougao &t1, const Trougao &t2);
+friend bool DaLiSuPodudarni(const Trougao &t1, const Trougao &t2);
+friend bool DaLiSuSlicni(const Trougao &t1, const Trougao &t2);
+};
+
+bool DaLiSuIdenticni(const Trougao &t1, const Trougao &t2){
+     if((t1.t1==t2.t1) && (t1.t2==t2.t2) && (t1.t3==t2.t3)) return true;
+     if((t1.t1==t2.t1) && (t1.t2==t2.t3) && (t1.t3==t2.t2)) return true;
+     if((t1.t1==t2.t2) && (t1.t2==t2.t1) && (t1.t3==t2.t3)) return true;
+     if((t1.t1==t2.t3) && (t1.t2==t2.t2) && (t1.t3==t2.t1)) return true;
+    return false;
+}
+
+bool DaLiSuPodudarni(const Trougao &t1, const Trougao &t2){
+    
+    std::vector<std::pair<Tacka, double>> stranice1(3);
+    std::vector<std::pair<Tacka, double>> stranice2(3);
+    
+    stranice1[0] = std::make_pair(t1.DajTjeme(3),t1.duzina_stranice12());
+    stranice1[1] = std::make_pair(t1.DajTjeme(1),t1.duzina_stranice23());
+    stranice1[2] = std::make_pair(t1.DajTjeme(2),t1.duzina_stranice31());
+    
+    stranice2[0] = std::make_pair(t2.DajTjeme(3),t2.duzina_stranice12());
+    stranice2[1] = std::make_pair(t2.DajTjeme(1),t2.duzina_stranice23());
+    stranice2[2] = std::make_pair(t2.DajTjeme(2),t2.duzina_stranice31());
+    
+    
+    sort(stranice1.begin(),stranice1.end(), [] (const std::pair<Tacka,double> &p1, const std::pair<Tacka,double> &p2){
+        return p1.second<p2.second;
+    });
+    sort(stranice2.begin(),stranice2.end(), [] (const std::pair<Tacka,double> &p1, const std::pair<Tacka,double> &p2){
+        return p1.second<p2.second;
+    });
+    
+    
+    for(int i=0; i<3; i++){
+        if(stranice1[i].second!= stranice2[i].second) return false;
+    }
+    
+    if(Trougao::Orijentacija(stranice1[0].first,stranice1[1].first,stranice1[2].first)==
+      Trougao::Orijentacija(stranice2[0].first,stranice2[1].first,stranice2[2].first)) return true;
+    
+    return false;
+
+}
+
+bool DaLiSuSlicni(const Trougao &t1, const Trougao &t2){
+    
+    std::vector<std::pair<Tacka, double>> uglovi1(3);
+    std::vector<std::pair<Tacka, double>> uglovi2(3);
+    
+    uglovi1[0] = std::make_pair(t1.DajTjeme(1),t1.DajUgao(1));
+    uglovi1[1] = std::make_pair(t1.DajTjeme(2),t1.DajUgao(2));
+    uglovi1[2] = std::make_pair(t1.DajTjeme(3),t1.DajUgao(3));
+    
+    uglovi2[0] = std::make_pair(t2.DajTjeme(1),t2.DajUgao(1));
+    uglovi2[1] = std::make_pair(t2.DajTjeme(2),t2.DajUgao(2));
+    uglovi2[2] = std::make_pair(t2.DajTjeme(3),t2.DajUgao(3));
+    
+    sort(uglovi1.begin(),uglovi1.end(), [] (const std::pair<Tacka,double> &p1, const std::pair<Tacka,double> &p2){
+        return p1.second<p2.second;
+    });
+    sort(uglovi2.begin(),uglovi2.end(), [] (const std::pair<Tacka,double> &p1, const std::pair<Tacka,double> &p2){
+        return p1.second<p2.second;
+    });
+    
+    
+    for(int i=0; i<3; i++){
+        if(uglovi1[i].second!= uglovi2[i].second) return false;
+    }
+    
+    if(Trougao::Orijentacija(uglovi1[0].first,uglovi1[1].first,uglovi1[2].first)==
+       Trougao::Orijentacija(uglovi2[0].first,uglovi2[1].first,uglovi2[2].first)) return true;
+    
+    return false;
+}
+
+int main ()
+{
+    int n;
+    double delta_x,delta_y,ugao_rotacije,faktor_skaliranja;
+    Tacka t1,t2,t3;
+    
+    std::cout<<"Koliko zelite kreirati trouglova: ";
+    std::cin>>n;
+    std::vector<std::shared_ptr<Trougao>> vektor(n);
+   
+    for(int i(0); i<n; i++){
+        std::cout<<"Unesite podatke za "<<i+1<<". trougao (x1 y1 x2 y2 x3 y3): ";
+        std::cin>>t1.first>>t1.second;
+        std::cin>>t2.first>>t2.second;
+        std::cin>>t3.first>>t3.second;
+        try{
+            vektor[i] = std::make_shared<Trougao>(t1,t2,t3);
+        }
+        catch(std::domain_error &e){
+            std::cout<<e.what()<<", ponovite unos!\n";
+            i--;
+        }
+    }
+    std::cout<<"Unesite vektor translacije (dx dy): ";
+    std::cin>>delta_x>>delta_y;
+    std::cout<<"Unesite ugao rotacije: ";
+    std::cin>>ugao_rotacije;
+    std::cout<<"Unesite faktor skaliranja: ";
+    std::cin>>faktor_skaliranja;
+   
+   std::cout<<"Trouglovi nakon obavljenih transformacija:\n";
+   std::transform(vektor.begin(),vektor.end(), vektor.begin(), [delta_x,delta_y,ugao_rotacije,faktor_skaliranja] (std::shared_ptr<Trougao> &t){
+                    t->Transliraj(delta_x,delta_y);
+                    t->Rotiraj(ugao_rotacije);
+                    t->Skaliraj(t->DajTjeme(1),faktor_skaliranja);
+                    return t;
+   });
+    std::sort(vektor.begin(),vektor.end(), [] (const std::shared_ptr<Trougao> &t1, const std::shared_ptr<Trougao> &t2){
+                return t1->DajPovrsinu() < t2->DajPovrsinu();
+    });
+    std::for_each(vektor.begin(),vektor.end(), [] (const std::shared_ptr<Trougao> &t){
+        t->Ispisi();
+        std::cout<<std::endl;
+    });
+    std::cout<<"Trougao sa najmanjim obimom: ";
+    auto min_trougao = *std::min_element(vektor.begin(), vektor.end(), [](const std::shared_ptr<Trougao> &t1,const std::shared_ptr<Trougao> &t2) {
+        return t1->DajObim()<t2->DajObim();
+    }); 
+    min_trougao->Ispisi();
+    std::cout<<std::endl;
+    int brojac (0);
+    
+    for(int i=0; i<vektor.size()-1;i++){
+        for(int j=i+1;j<vektor.size(); j++){
+            if(DaLiSuIdenticni(*vektor[i],*vektor[j])) brojac++;
+        }
+    }
+    if(brojac==0) std::cout<<"Nema identicnih trouglova!\n";
+    else{
+    std::cout<<"Parovi identicnih trouglova:\n";
+    for(int i=0; i<vektor.size()-1;i++){
+        for(int j=i+1;j<vektor.size(); j++){
+            if(DaLiSuIdenticni(*vektor[i],*vektor[j])){
+                vektor[i]->Ispisi();
+                std::cout<<" i ";
+                vektor[j]->Ispisi();
+                std::cout << std::endl;
+                brojac++;
+                }
+            }
+        }
+    }
+    brojac=0;
+
+    for(int i=0; i<vektor.size()-1;i++){
+        for(int j=i+1;j<vektor.size(); j++){
+            if(DaLiSuPodudarni(*vektor[i],*vektor[j])) brojac++;
+        }
+    }
+    if(brojac==0) std::cout<<"Nema podudarnih trouglova!\n";
+    else{
+    std::cout<<"Parovi podudarnih trouglova:\n";
+    for(int i=0; i<vektor.size()-1;i++){
+        for(int j=i+1;j<vektor.size(); j++){
+            if(DaLiSuPodudarni(*vektor[i],*vektor[j])){
+                vektor[i]->Ispisi();
+                std::cout<<" i ";
+                vektor[j]->Ispisi();
+                std::cout << std::endl;
+                brojac++;
+                }
+            }
+        }
+    }
+    
+    brojac=0;
+
+    
+    for(int i=0; i<vektor.size()-1;i++){
+        for(int j=i+1;j<vektor.size(); j++){
+            if(DaLiSuSlicni(*vektor[i],*vektor[j])) brojac++;
+        }
+    }
+    if(brojac==0) std::cout<<"Nema slicnih trouglova!\n";
+    else{
+    std::cout<<"Parovi slicnih trouglova:\n";
+    for(int i=0; i<vektor.size()-1;i++){
+        for(int j=i+1;j<vektor.size(); j++){
+            if(DaLiSuSlicni(*vektor[i],*vektor[j])){
+                vektor[i]->Ispisi();
+                std::cout<<" i ";
+                vektor[j]->Ispisi();
+                std::cout << std::endl;
+                brojac++;
+                }
+            }
+        }
+    }
+  std::for_each(vektor.begin(),vektor.end(), [](std::shared_ptr<Trougao> &t1){
+  t1=nullptr;
+    });
+	return 0;
+}
+_________________________________________________________________________________________
+
+//TP, 2016/2017, Zadaæa 4, Zadatak 2
+//Napomena: testovi ce biti dostupni dan pred rok!
+#include <iostream>
+#include <cmath>
+#include <utility>
+#include <stdexcept>
+#include <memory>
+#include <algorithm>
+#include <vector>
+#include <string>
+
+class GradjaninBiH{
+    std::string _ime_i_prezime;
+    long long int _jmbg;
+    int _dan_rodjenja, _mjesec_rodjenja,_godina_rodjenja,_sifra_regije;
+    int _pol;
+    GradjaninBiH* prethodni;
+    
+    int DajKodPola (){
+        return (_jmbg/10)%1000;
+    }
+    
+    bool IspravnostDatuma(int d, int m, int g){
+        int broj_dana[]{31,28,31,30,31,30,31,31,30,31,30,31};
+        if((g%4==0 && g%100!=0) || g%400==0) broj_dana[1]++;
+        if(g<1 || m<1 || m>12 || d<1 || d>broj_dana[m-1]) return false;
+        return true;
+    }
+    
+    bool IspravnostJMBG(long long int jmbg){
+        int jmbg_niz[13]={0};
+        if(jmbg/100000000000==0) return false;
+        if(!IspravnostDatuma(DajDanRodjenja(),DajMjesecRodjenja(),DajGodinuRodjenja())) return false;
+        if(DajDanRodjenja()<10){
+            jmbg_niz[0]=0;
+            jmbg_niz[1]=DajDanRodjenja();
+        } else{
+            jmbg_niz[0]=DajDanRodjenja()/10;
+            jmbg_niz[1]=DajDanRodjenja()%10;
+        }
+        if(DajMjesecRodjenja()<10){
+            jmbg_niz[2]=0;
+            jmbg_niz[3]=DajMjesecRodjenja();
+        } else {
+            jmbg_niz[2]=DajMjesecRodjenja()/10;
+            jmbg_niz[3]=DajMjesecRodjenja()%10;
+        }
+        if(DajGodinuRodjenja()>=2000){
+            jmbg_niz[4]=0;
+            jmbg_niz[5]=(DajGodinuRodjenja()/10)%10;
+            jmbg_niz[6]=DajGodinuRodjenja()%10;
+        }else {
+            jmbg_niz[4]=(DajGodinuRodjenja()/100)%10;
+            jmbg_niz[5]=(DajGodinuRodjenja()/10)%10;
+            jmbg_niz[6]=DajGodinuRodjenja()%10;
+        }
+        jmbg_niz[7]=(jmbg/100000)%10;
+        jmbg_niz[8]=(jmbg/10000)%10;
+        jmbg_niz[9]=(jmbg/1000)%10;
+        jmbg_niz[10]=(jmbg/100)%10;
+        jmbg_niz[11]=(jmbg/10)%10;
+        jmbg_niz[12]=jmbg%10;
+        
+        int c13=11-(7*(jmbg_niz[0]+jmbg_niz[6])+
+                    6*(jmbg_niz[1]+jmbg_niz[7])+
+                    5*(jmbg_niz[2]+jmbg_niz[8])+
+                    4*(jmbg_niz[3]+jmbg_niz[9])+
+                    3*(jmbg_niz[4]+jmbg_niz[10])+
+                    2*(jmbg_niz[5]+jmbg_niz[11]))%11;
+                    
+        if(c13==10) return false;
+        
+        return true;
+    }
+    
+    public:
+        enum Pol {Musko, Zensko};
+        static GradjaninBiH* posljednjiKreirani;
+        GradjaninBiH(std::string ime_i_prezime, long long int jmbg) : _ime_i_prezime(ime_i_prezime), _jmbg(jmbg){
+            if(IspravnostJMBG(jmbg)==false) throw std::logic_error("JMBG nije validan");
+            int temp(0);
+            
+            temp=(_jmbg/100000000000)%100;
+            _dan_rodjenja=temp;
+            temp=(_jmbg/1000000000)%100;
+            _mjesec_rodjenja=temp;
+            temp=(_jmbg/1000000)%1000+1000;
+            _godina_rodjenja=temp;
+            if(temp<1900) _godina_rodjenja=temp+1000;
+            temp=_jmbg/10000;
+            _sifra_regije=temp%100;
+            
+            int zaPol = (_jmbg/10)%1000;
+            if(zaPol<500) _pol=Pol::Musko;
+            else _pol=Pol::Zensko;
+            
+            if(posljednjiKreirani==nullptr) {
+                prethodni=nullptr;
+                posljednjiKreirani=this;
+            }
+            else {
+                prethodni=posljednjiKreirani;
+                posljednjiKreirani=this;
+            }
+            
+            GradjaninBiH* tempG=posljednjiKreirani->prethodni;
+            while(tempG!=nullptr){
+                if(tempG->DajJMBG()==jmbg) throw std::logic_error("Vec postoji gradjanin sa istim JMBG");
+                tempG=tempG->prethodni;
+            }
+        }
+        
+        
+        GradjaninBiH(std::string ime_i_prezime, int dan_rodjenja, int mjesec_rodjenja,
+        int godina_rodjenja, int sifra_regije, Pol pol) : _ime_i_prezime(ime_i_prezime),_dan_rodjenja(dan_rodjenja),
+                                                        _mjesec_rodjenja(mjesec_rodjenja), _godina_rodjenja(godina_rodjenja),
+                                                        _sifra_regije(sifra_regije),_pol(pol){
+            if(IspravnostDatuma(dan_rodjenja,mjesec_rodjenja,godina_rodjenja)==false) throw std::logic_error("Neispravni podaci");
+            _jmbg=0;
+            _jmbg=10000000000*dan_rodjenja;
+            _jmbg+=100000000*mjesec_rodjenja;
+            
+            _jmbg+=100000*(godina_rodjenja-1000);
+            int max_muskarac(-1);
+            int max_zena(499);
+            
+            //std::cout << dan_rodjenja << mjesec_rodjenja << godina_rodjenja;
+            
+            if(posljednjiKreirani==nullptr) {
+                prethodni=nullptr;
+                posljednjiKreirani=this;
+            }
+            else {
+                prethodni=posljednjiKreirani;
+                posljednjiKreirani=this;
+            }
+            
+            GradjaninBiH* tempG=posljednjiKreirani->prethodni;
+            while(tempG!=nullptr){
+                if(tempG->DajDanRodjenja()==dan_rodjenja && tempG->DajMjesecRodjenja()==mjesec_rodjenja &&
+                   tempG->DajGodinuRodjenja()==godina_rodjenja && tempG->DajSifruRegije()==sifra_regije){
+                       if(tempG->DajKodPola()>max_muskarac)
+                        max_muskarac=tempG->DajKodPola();
+                        if(tempG->DajKodPola()>max_zena)
+                        max_zena=tempG->DajKodPola();
+                   }
+                
+                tempG=tempG->prethodni;
+            }
+            
+        
+            _jmbg+=sifra_regije*1000;
+            _jmbg*=10;
+            if(_pol==Pol::Musko) _jmbg+=max_muskarac*1+1;
+            else _jmbg+=(max_zena+1)*10;
+            
+        int jmbg_niz[13]={0};
+        if(dan_rodjenja<10){
+            jmbg_niz[0]=0;
+            jmbg_niz[1]=dan_rodjenja;
+        } else{
+            jmbg_niz[0]=dan_rodjenja/10;
+            jmbg_niz[1]=dan_rodjenja%10;
+        }
+        if(mjesec_rodjenja<10){
+            jmbg_niz[2]=0;
+            jmbg_niz[3]=mjesec_rodjenja;
+        } else {
+            jmbg_niz[2]=mjesec_rodjenja/10;
+            jmbg_niz[3]=mjesec_rodjenja%10;
+        
+        }
+        if(godina_rodjenja>=2000){
+            jmbg_niz[4]=0;
+            jmbg_niz[5]=(godina_rodjenja/10)%10;
+            jmbg_niz[6]=godina_rodjenja%10;
+        }else {
+            jmbg_niz[4]=(godina_rodjenja/100)%10;
+            jmbg_niz[5]=(godina_rodjenja/10)%10;
+            jmbg_niz[6]=godina_rodjenja%10;
+        }
+        jmbg_niz[7]=(_jmbg/100000)%10;
+        jmbg_niz[8]=(_jmbg/10000)%10;
+        jmbg_niz[9]=(_jmbg/1000)%10;
+        jmbg_niz[10]=(_jmbg/100)%10;
+        jmbg_niz[11]=(_jmbg/10)%10;
+        jmbg_niz[12]=_jmbg%10;
+        
+        int c13=11-(7*(jmbg_niz[0]+jmbg_niz[6])+
+                    6*(jmbg_niz[1]+jmbg_niz[7])+
+                    5*(jmbg_niz[2]+jmbg_niz[8])+
+                    4*(jmbg_niz[3]+jmbg_niz[9])+
+                    3*(jmbg_niz[4]+jmbg_niz[10])+
+                    2*(jmbg_niz[5]+jmbg_niz[11]))%11;
+                    
+        if(c13==10) throw std::logic_error("JMBG nije validan");
+        if(c13==11) c13=0;
+        
+        if(!IspravnostJMBG(_jmbg)) throw std::logic_error("JMBG nije validan");
+        _jmbg+=c13;
+        
+        tempG=posljednjiKreirani->prethodni;
+        while(tempG!=nullptr){
+            if(tempG->DajJMBG()==_jmbg)
+             throw std::logic_error("Vec postoji gradjanin sa istim JMBG");
+            tempG=tempG->prethodni;
+        }
+            
+    }
+    
+    ~GradjaninBiH(){
+        if(prethodni!=nullptr){
+            posljednjiKreirani=prethodni;
+            prethodni=prethodni->prethodni;
+        }
+        else{ posljednjiKreirani=nullptr;
+        }
+    }
+        std::string DajImeIPrezime() const{
+            return _ime_i_prezime;
+        }
+        long long int DajJMBG() const{
+            return _jmbg;
+        }
+        int DajDanRodjenja() const{
+            int temp(0);
+            temp=(_jmbg/100000000000)%100;
+            return temp;
+        }
+        GradjaninBiH* DajPrethodni() const{
+            return prethodni;
+        }
+        
+        int DajMjesecRodjenja() const{
+            int temp(0);
+            temp=(_jmbg/1000000000)%100;
+            return temp;
+        }
+        int DajGodinuRodjenja() const{
+            int temp(0);
+            temp=(_jmbg/1000000)%1000+1000;
+            if(temp<1900) temp+=1000;
+            return temp;
+        }
+        int DajSifruRegije() const{
+            int temp(0);
+            temp=_jmbg/10000;
+            return temp%100;
+        }
+        Pol DajPol() const{
+            return Pol(_pol);
+        }
+        void PromijeniImeIPrezime(std::string novo_ime){
+            _ime_i_prezime=novo_ime;
+        }
+
+};
+
+GradjaninBiH* GradjaninBiH::posljednjiKreirani=nullptr;
+int main ()
+{       std::string ime_i_prezime,_ime_i_prezime;
+        long long int JMBG;
+        int dd,mm,gggg,sifra_regije,m,n;
+        //enum Pol{M,Z};
+        char a(0);
+    
+    std::cout<<"Koliko gradjana zelite unijeti po JMBG? ";
+    std::cin>>n;
+    std::cout<<std::endl;
+    for(int i=0; i<n; i++){
+
+        std::cin.ignore(100000,'\n');
+        std::cout<<"Unesite ime i prezime (u istom redu): ";
+        std::getline(std::cin,ime_i_prezime);
+        
+        std::cout<<"\nUnesite JMBG: ";
+        
+        
+        std::cin>>JMBG;
+        
+        try{
+        GradjaninBiH g (ime_i_prezime,JMBG);
+        std::cout<<"\nUnijeli ste gradjanina "<<g.DajImeIPrezime()<<" rodjenog "<<g.DajDanRodjenja()<<"."
+                <<g.DajMjesecRodjenja()<<"."<<g.DajGodinuRodjenja()<<" u regiji "
+                <<g.DajSifruRegije()<<", ";
+                     if(g.DajPol()==1) std::cout<<"zensko.";
+                     else std::cout<<"musko.";
+        }catch(std::logic_error e){
+             std::cout<<std::endl<<e.what();
+             i--;
+        }
+        std::cout<<std::endl;
+    }
+    std::cout<<"Koliko gradjana zelite unijeti po datumu rodjenja, regiji i polu? ";
+    std::cin>>m;
+    std::cout<<std::endl;
+    for(int i=0; i<m; i++){
+
+        std::cin.ignore(10000,'\n');
+        std::cout<<"Unesite ime i prezime (u istom redu): ";
+        std::getline(std::cin, ime_i_prezime);
+        std::cout<<"\nUnesite datum rodjenja (format dd/mm/gggg): ";
+        char t(0);
+        std::cin>>dd>>t>>mm>>t>>gggg;
+        std::cout<<"\nUnesite sifru regije: ";
+        std::cin>>sifra_regije;
+        std::cout<<"\nUnesite M za musko, Z za zensko: ";
+        std::cin>>a;
+        try{
+        if(a=='M') {
+            GradjaninBiH g (ime_i_prezime,dd,mm,gggg,sifra_regije,GradjaninBiH::Pol::Musko);
+            std::cout<<"\nUnijeli ste gradjanina "<<g.DajImeIPrezime()<<" JMBG: "<<g.DajJMBG() << ".";
+        }
+        
+        else if(a=='Z') {
+        
+            GradjaninBiH g (ime_i_prezime,dd,mm,gggg,sifra_regije,GradjaninBiH::Pol::Zensko);
+            std::cout<<"\nUnijeli ste gradjanina "<<g.DajImeIPrezime()<<" JMBG: "<<g.DajJMBG() << ".";
+        }
+        else throw std::domain_error("Neispravni podaci");
+        }catch(std::logic_error &e){
+             std::cout<<std::endl<<e.what();
+             i--;
+        }
+        catch (std::domain_error &e) {
+            std::cout << std::endl<<e.what();
+            i--;
+        }
+        //std::cout<<""
+        std::cout<<std::endl;
+    }
+
+	return 0;
+}
+
+__________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 5, Zadatak 1)
+//Autotestovi by Eldar Kurtic (mail: ekurtic3@etf.unsa.ba)
+//Za autotestove se obracati *iskljucivo* osobi koja ih pise
+
+#include <iostream>
+#include <stdexcept>
+#include <map>
+
+struct Korisnik{
+    std::string ime;
+    std::string prezime;
+    std::string adresa;
+    std::string telefon;
+};
+
+class Knjiga{
+    std::string naslov;
+    std::string ime_pisca;
+    std::string zanr;
+    int godina_izdavanja;
+    Korisnik *zaduzena;
+    
+    public: 
+    
+        Knjiga(std::string _naslov, std::string _ime_pisca, std::string _zanr, int _godina_izdavanja) : 
+            naslov(_naslov),ime_pisca(_ime_pisca), zanr(_zanr),godina_izdavanja(_godina_izdavanja), zaduzena(nullptr){}
+
+        std::string DajNaslov () const {return naslov;}
+        std::string DajAutora () const {return ime_pisca;}
+        std::string DajZanr () const {return zanr;}
+        int DajGodinuIzdavanja () const {return godina_izdavanja;}
+        Korisnik* DajKodKogaJe () const {return zaduzena;}
+        
+        void ZaduziKnjigu (Korisnik &k){
+            zaduzena = &k;
+        }
+        void RazduziKnjigu () {
+            zaduzena=nullptr;
+        }
+        bool DaLiJeZaduzena () {
+            if (zaduzena!=nullptr) return true;
+            return false;
+        }
+};
+
+class Biblioteka{
+    std::map<int, Korisnik*> mapa_korisnika;
+    std::map<int, Knjiga*> mapa_knjiga;
+
+  public:
+        Biblioteka () {};
+        ~Biblioteka(){
+            for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end(); i++) {
+                delete i->second;
+            }
+            mapa_knjiga.clear();
+            for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end(); i++) {
+                delete i->second;
+            }
+            mapa_korisnika.clear();
+        }
+        
+    void RegistrirajNovogKorisnika(int clanski_broj, std::string ime, std::string prezime, 
+                                       std::string adresa, std::string broj_telefona){
+        for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end();i++){
+            if(clanski_broj==i->first) throw std::logic_error("Korisnik vec postoji");
+        }    
+        Korisnik *novi_korisnik=new Korisnik;
+        novi_korisnik->ime = ime;
+        novi_korisnik->prezime = prezime;
+        novi_korisnik->adresa = adresa;
+        novi_korisnik->telefon = broj_telefona;
+        mapa_korisnika[clanski_broj] = novi_korisnik;
+    }
+    
+    void RegistrirajNovuKnjigu(int evidencijski_broj_knjige, std::string naslov, std::string ime_pisca, 
+                                       std::string zanr, int godina_izdavanja){
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) throw std::logic_error("Knjiga vec postoji");
+        }    
+        Knjiga *nova_knjiga=new Knjiga(naslov, ime_pisca, zanr, godina_izdavanja);
+        mapa_knjiga[evidencijski_broj_knjige] = nova_knjiga;                                   
+    }
+    
+    Korisnik& NadjiKorisnika(int clanski_broj){
+        int k(0);
+        for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end();i++){
+            if(clanski_broj==i->first) k++;
+            if(k==0) throw std::logic_error("Korisnik nije nadjen");
+        } 
+        return *mapa_korisnika[clanski_broj];
+    }
+        
+    Knjiga& NadjiKnjigu(int evidencijski_broj_knjige){
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) std::logic_error("Knjiga nije nadjena");
+        }    
+        return *mapa_knjiga[evidencijski_broj_knjige];
+    }
+    
+    void IzlistajKorisnike() const {
+        for(auto it(mapa_korisnika.begin()); it!=mapa_korisnika.end(); it++){
+        std::cout<<"Clanski broj: "<<it->first<<std::endl;
+        std::cout<<"Ime i prezime: "<<it->second->ime<<" "<<it->second->prezime<<std::endl;
+        std::cout<<"Adresa: "<<it->second->adresa<<std::endl;
+        std::cout<<"Broj telefona: "<<it->second->telefon<<std::endl;
+        }
+    }
+    
+    void IzlistajKnjige() const {
+    for(auto it(mapa_knjiga.begin()); it!=mapa_knjiga.end(); it++){
+        std::cout<<"Evidencijski broj: "<<it->first<<std::endl;
+        std::cout<<"Naslov: "<<it->second->DajNaslov()<<"\n";
+        std::cout<<"Pisac: "<<it->second->DajAutora()<<std::endl;
+        std::cout<<"Zanr: "<<it->second->DajZanr()<<std::endl;
+        std::cout<<"Godina izdavanja: "<<it->second->DajGodinuIzdavanja()<<std::endl;
+        
+        if(it->second->DaLiJeZaduzena()) std::cout<<"Zaduzena kod korisnika: "
+            <<it->second->DajKodKogaJe()->ime << " " << it->second->DajKodKogaJe()->prezime << std::endl << std::endl;
+            
+        }
+    }
+    
+    void ZaduziKnjigu(int evidencijski_broj_knjige,int clanski_broj){
+        int k(0);
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) k++;
+        }
+        if(k==0) throw std::logic_error("Knjiga nije nadjena");
+        mapa_knjiga[evidencijski_broj_knjige]->ZaduziKnjigu(*mapa_korisnika[clanski_broj]);
+        
+    }
+    void RazduziKnjigu(int evidencijski_broj_knjige){
+        int k(0);
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) k++;
+            if(k==0) throw std::logic_error("Knjiga nije nadjena");
+        }   
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(!i->second->DaLiJeZaduzena()) throw std::logic_error("Knjiga nije zaduzena");
+        }   
+    }
+    
+    void PrikaziZaduzenja(int clanski_broj){
+        /*for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end();i++){
+            if(clanski_broj==i->first) 
+                throw std::logic_error("Nema zaduzenja za tog korisnika!");
+        } */
+        bool test(false);
+        for(auto it(mapa_knjiga.begin()); it!=mapa_knjiga.end(); it++){
+            if (it->second->DajKodKogaJe() == mapa_korisnika[clanski_broj]) {
+                test=true;
+                break;
+            }
+        }
+        if (!test)
+            throw std::logic_error("Nema zaduzenja za tog korisnika!");
+        
+        for(auto it(mapa_knjiga.begin()); it!=mapa_knjiga.end(); it++){
+            if (it->second->DajKodKogaJe() == mapa_korisnika[clanski_broj]) {
+                std::cout<<"Evidencijski broj: "<<it->first<<std::endl;
+                std::cout<<"Naslov: "<<it->second->DajNaslov()<<"\n";
+                std::cout<<"Pisac: "<<it->second->DajAutora()<<std::endl;
+                std::cout<<"Zanr: "<<it->second->DajZanr()<<std::endl;
+                std::cout<<"Godina izdavanja: "<<it->second->DajGodinuIzdavanja()<<std::endl<<std::endl;
+            }
+        }
+    }
+};
+
+int main ()
+{
+    Biblioteka BibliotekaSarajeva;
+    int n(0);
+    std::map<int, Korisnik*> mapa_korisnika;
+    std::map<int, Knjiga*> mapa_knjiga;
+    std::cout<<"\nDobrodosli na stranicu Biblioteka grada Sarajeva! Ja sam Amila i bit cu vas vodic :)\n\n\n";
+    std::cout<<"Unesite broj knjiga koje želite unijeti: ";
+    std::cout<<"(ukoliko želite preskoèiti ovaj dio, unesite 0)\n";
+    std::cin>>n;
+    std::string naziv,autor,zanr;
+    int godina_izdavanja(0),brojcic(0);
+    for(int i(0); i<n; i++){
+    std::cout<<"\nEvidencijski broj knjige: ";
+    std::cin>>brojcic;
+    std::cout<<"\nUnesite naziv knjige: ";
+    std::cin.clear();
+    std::getline(std::cin, naziv);
+    std::cout<<"\nUnesite autora: ";
+    std::cin.clear();
+    std::getline(std::cin, autor);
+    std::cout<<"\nUnesite zanr: ";
+    std::cin.clear();
+    std::getline(std::cin, zanr);
+    std::cin.clear();
+    std::cout<<"\nUnesite godinu izdavanja: ";
+    std::cin>>godina_izdavanja;
+    BibliotekaSarajeva.RegistrirajNovuKnjigu(brojcic,naziv, autor, zanr, godina_izdavanja);
+    }
+    
+    int m(0);
+    std::cout<<"\nŽelite registrirati novog korisnika? Ili više njih? ";
+    std::cout<<"Prvo unesite broj korisnika koje želite registrirati, a zatim i njihove podatke !";
+    std::cout<<"(ukoliko želite preskoèiti ovaj dio, unesite 0)\n";
+    std::cin >> m;
+    
+    int broj(0);
+    std::string ime,prezime,adresa,broj_telefona;
+    
+    for(int i(0); i<m; i++){
+        std::cout<<"\nEvidencijski broj: ";
+        std::cin>>broj;
+        std::cout<<"\nIme korisnika: ";
+        std::getline(std::cin,ime);
+        std::cout<<"\nPrezime korisnika: ";
+        std::getline(std::cin,prezime);
+        std::cout<<"\nAdresa: ";
+        std::getline(std::cin,adresa);
+        std::cout<<"\nBroj Telefona: ";
+        std::getline(std::cin, broj_telefona);
+        
+        BibliotekaSarajeva.RegistrirajNovogKorisnika(broj,ime,prezime,adresa,broj_telefona);
+    }
+    
+    int evidencijski;
+    std::cout<<"Unesite evidencijski broj osobe koju želite pronaæi: ";
+    std::cin>>evidencijski;
+    std::cout<<BibliotekaSarajeva.NadjiKorisnika(evidencijski).ime;
+
+    std::cout<<"\nŽelite li provjeriti da li je neka knjiga zadužena? Unesite evidencijski broj knjige!\n";
+    std::cin>>evidencijski;
+    std::cout<<BibliotekaSarajeva.NadjiKnjigu(evidencijski).DaLiJeZaduzena();
+    
+
+    BibliotekaSarajeva.IzlistajKnjige();
+    BibliotekaSarajeva.IzlistajKorisnike();
+
+    
+	return 0;
+}
+
+__________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 5, Zadatak 2)
+//Autotestovi by Eldar Kurtic (mail: ekurtic3@etf.unsa.ba)
+//Za autotestove se obracati *iskljucivo* osobi koja ih pise
+
+#include <iostream>
+#include <stdexcept>
+#include <map>
+#include <memory>
+
+struct Korisnik{
+    std::string ime;
+    std::string prezime;
+    std::string adresa;
+    std::string telefon;
+};
+
+class Knjiga{
+    std::string naslov;
+    std::string ime_pisca;
+    std::string zanr;
+    int godina_izdavanja;
+    std::shared_ptr<Korisnik> zaduzena;
+    
+    public: 
+    
+        Knjiga(std::string _naslov, std::string _ime_pisca, std::string _zanr, int _godina_izdavanja) : 
+            naslov(_naslov),ime_pisca(_ime_pisca), zanr(_zanr),godina_izdavanja(_godina_izdavanja), zaduzena(nullptr){}
+
+        std::string DajNaslov () const {return naslov;}
+        std::string DajAutora () const {return ime_pisca;}
+        std::string DajZanr () const {return zanr;}
+        int DajGodinuIzdavanja () const {return godina_izdavanja;}
+        std::shared_ptr<Korisnik> DajKodKogaJe () const {return zaduzena;}
+        
+        void ZaduziKnjigu (Korisnik &k){
+            zaduzena = std::make_shared<Korisnik>(k);
+        }
+        void RazduziKnjigu () {
+            zaduzena=nullptr;
+        }
+        bool DaLiJeZaduzena () {
+            if (zaduzena!=nullptr) return true;
+            return false;
+        }
+};
+
+class Biblioteka{
+    std::map<int, std::shared_ptr<Korisnik> > mapa_korisnika;
+    std::map<int, std::shared_ptr<Knjiga> > mapa_knjiga;
+    //mapa_knjiga.first je evidencijski broj knjige
+    //mapa_korisnika.first je clanski broj korisnika
+    //mapa_knjiga.second je Knjiga** mapa_knjiga
+    //mapa_korisnika.second je Korisnik** mapa_korisnika
+    
+  public:
+        Biblioteka () {};
+        ~Biblioteka(){
+            mapa_knjiga.clear();
+            mapa_korisnika.clear();
+        }
+        
+    void RegistrirajNovogKorisnika(int clanski_broj, std::string ime, std::string prezime, 
+                                       std::string adresa, std::string broj_telefona){
+        for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end();i++){
+            if(clanski_broj==i->first) throw std::logic_error("Korisnik vec postoji");
+        }    
+        std::shared_ptr<Korisnik> novi_korisnik = std::make_shared<Korisnik>();
+        novi_korisnik->ime = ime;
+        novi_korisnik->prezime = prezime;
+        novi_korisnik->adresa = adresa;
+        novi_korisnik->telefon = broj_telefona;
+        mapa_korisnika[clanski_broj] = novi_korisnik;
+    }
+    
+    void RegistrirajNovuKnjigu(int evidencijski_broj_knjige, std::string naslov, std::string ime_pisca, 
+                                       std::string zanr, int godina_izdavanja){
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) throw std::logic_error("Knjiga vec postoji");
+        }    
+        std::shared_ptr<Knjiga> nova_knjiga = std::make_shared<Knjiga>(Knjiga(naslov, ime_pisca, zanr, godina_izdavanja));
+        mapa_knjiga[evidencijski_broj_knjige] = nova_knjiga;                                   
+    }
+    
+    Korisnik& NadjiKorisnika(int clanski_broj){
+        int k(0);
+        for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end();i++){
+            if(clanski_broj==i->first) k++;
+            if(k==0) throw std::logic_error("Korisnik nije nadjen");
+        } 
+        return *mapa_korisnika[clanski_broj].get();
+    }
+        
+    Knjiga& NadjiKnjigu(int evidencijski_broj_knjige){
+        int k(0);
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) k++;
+            if(k==0) throw std::logic_error("Knjiga nije nadjena");
+        }    
+        return *mapa_knjiga[evidencijski_broj_knjige].get();
+    }
+    
+    void IzlistajKorisnike() const {
+        for(auto it(mapa_korisnika.begin()); it!=mapa_korisnika.end(); it++){
+        std::cout<<"Clanski broj: "<<it->first<<std::endl;
+        std::cout<<"Ime i prezime: "<<it->second->ime<<" "<<it->second->prezime<<std::endl;
+        std::cout<<"Adresa: "<<it->second->adresa<<std::endl;
+        std::cout<<"Broj telefona: "<<it->second->telefon<<std::endl;
+        }
+    }
+    
+    void IzlistajKnjige() const {
+    for(auto it(mapa_knjiga.begin()); it!=mapa_knjiga.end(); it++){
+        std::cout<<"Evidencijski broj: "<<it->first<<std::endl;
+        std::cout<<"Naslov: "<<it->second->DajNaslov()<<"\n";
+        std::cout<<"Pisac: "<<it->second->DajAutora()<<std::endl;
+        std::cout<<"Zanr: "<<it->second->DajZanr()<<std::endl;
+        std::cout<<"Godina izdavanja: "<<it->second->DajGodinuIzdavanja()<<std::endl;
+        
+        if(it->second->DaLiJeZaduzena()) std::cout<<"Zaduzena kod korisnika: "
+            <<it->second->DajKodKogaJe()->ime << " " << it->second->DajKodKogaJe()->prezime << std::endl << std::endl;
+            
+        }
+    }
+    
+    void ZaduziKnjigu(int evidencijski_broj_knjige,int clanski_broj){
+        int k(0);
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) k++;
+        }
+        if(k==0) throw std::logic_error("Knjiga nije nadjena");
+        mapa_knjiga[evidencijski_broj_knjige]->ZaduziKnjigu(*mapa_korisnika[clanski_broj]);
+        
+    }
+    void RazduziKnjigu(int evidencijski_broj_knjige){
+        int k(0);
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(evidencijski_broj_knjige==i->first) k++;
+            if(k==0) throw std::logic_error("Knjiga nije nadjena");
+        }   
+        for(auto i(mapa_knjiga.begin()); i!=mapa_knjiga.end();i++){
+            if(!i->second->DaLiJeZaduzena()) throw std::logic_error("Knjiga nije zaduzena");
+        }   
+    }
+    
+    void PrikaziZaduzenja(int clanski_broj){
+        /*for(auto i(mapa_korisnika.begin()); i!=mapa_korisnika.end();i++){
+            if(clanski_broj==i->first) 
+                throw std::logic_error("Nema zaduzenja za tog korisnika!");
+        } */
+        bool test(false);
+        for(auto it(mapa_knjiga.begin()); it!=mapa_knjiga.end(); it++){
+            if (it->second->DajKodKogaJe() == mapa_korisnika[clanski_broj]) {
+                test=true;
+                break;
+            }
+        }
+        if (!test)
+            throw std::logic_error("Nema zaduzenja za tog korisnika!");
+        
+        for(auto it(mapa_knjiga.begin()); it!=mapa_knjiga.end(); it++){
+            if (it->second->DajKodKogaJe() == mapa_korisnika[clanski_broj]) {
+                std::cout<<"Evidencijski broj: "<<it->first<<std::endl;
+                std::cout<<"Naslov: "<<it->second->DajNaslov()<<"\n";
+                std::cout<<"Pisac: "<<it->second->DajAutora()<<std::endl;
+                std::cout<<"Zanr: "<<it->second->DajZanr()<<std::endl;
+                std::cout<<"Godina izdavanja: "<<it->second->DajGodinuIzdavanja()<<std::endl<<std::endl;
+            }
+        }
+    }
+};
+
+int main ()
+{
+    Biblioteka BibliotekaSarajeva;
+    int n(0);
+    std::map<int, Korisnik*> mapa_korisnika;
+    std::map<int, Knjiga*> mapa_knjiga;
+    std::cout<<"\nDobrodosli na stranicu Biblioteka grada Sarajeva! Ja sam Amila i bit cu vas vodic :)\n\n\n";
+    std::cout<<"Unesite broj knjiga koje želite unijeti: ";
+    std::cout<<"(ukoliko želite preskoèiti ovaj dio, unesite 0)\n";
+    std::cin>>n;
+    std::string naziv,autor,zanr;
+    int godina_izdavanja(0),brojcic(0);
+    for(int i(0); i<n; i++){
+    std::cout<<"\nEvidencijski broj knjige: ";
+    std::cin>>brojcic;
+    std::cout<<"\nUnesite naziv knjige: ";
+    std::cin.clear();
+    std::getline(std::cin, naziv);
+    std::cout<<"\nUnesite autora: ";
+    std::cin.clear();
+    std::getline(std::cin, autor);
+    std::cout<<"\nUnesite zanr: ";
+    std::cin.clear();
+    std::getline(std::cin, zanr);
+    std::cin.clear();
+    std::cout<<"\nUnesite godinu izdavanja: ";
+    std::cin>>godina_izdavanja;
+    BibliotekaSarajeva.RegistrirajNovuKnjigu(brojcic,naziv, autor, zanr, godina_izdavanja);
+    }
+    
+    int m(0);
+    std::cout<<"\nŽelite registrirati novog korisnika? Ili više njih? ";
+    std::cout<<"Prvo unesite broj korisnika koje želite registrirati, a zatim i njihove podatke !";
+    std::cout<<"(ukoliko želite preskoèiti ovaj dio, unesite 0)\n";
+    std::cin >> m;
+    
+    int broj(0);
+    std::string ime,prezime,adresa,broj_telefona;
+    
+    for(int i(0); i<m; i++){
+        std::cout<<"\nEvidencijski broj: ";
+        std::cin>>broj;
+        std::cout<<"\nIme korisnika: ";
+        std::getline(std::cin,ime);
+        std::cout<<"\nPrezime korisnika: ";
+        std::getline(std::cin,prezime);
+        std::cout<<"\nAdresa: ";
+        std::getline(std::cin,adresa);
+        std::cout<<"\nBroj Telefona: ";
+        std::getline(std::cin, broj_telefona);
+        
+        BibliotekaSarajeva.RegistrirajNovogKorisnika(broj,ime,prezime,adresa,broj_telefona);
+    }
+    
+    int evidencijski;
+    std::cout<<"Unesite evidencijski broj osobe koju želite pronaæi: ";
+    std::cin>>evidencijski;
+    std::cout<<BibliotekaSarajeva.NadjiKorisnika(evidencijski).ime;
+
+    std::cout<<"\nŽelite li provjeriti da li je neka knjiga zadužena? Unesite evidencijski broj knjige!\n";
+    std::cin>>evidencijski;
+    std::cout<<BibliotekaSarajeva.NadjiKnjigu(evidencijski).DaLiJeZaduzena();
+    
+
+    BibliotekaSarajeva.IzlistajKnjige();
+    BibliotekaSarajeva.IzlistajKorisnike();
+
+    
+	return 0;
+}
+___________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 5, Zadatak 3)
+//Autotestovi by Enil Pajic (mail: epajic1@etf.unsa.ba)
+//Za autotestove se obracati *iskljucivo* osobi koja ih pise
+#include <iostream>
+#include <limits>
+#include <stdexcept>
+
+const long long int M = std::numeric_limits<long long int>::max();
+const long long int m = std::numeric_limits<long long int>::min();
+
+class Razlomak{
+    long long int _brojnik;
+    long long int _nazivnik;
+    
+    static long long int nzd(long long int p,long long int q){
+        if(q==0)
+            return p;
+        else 
+            return nzd(q,p%q);
+    }
+
+    void PostaviRazlomak(long long int brojnik,long long int nazivnik);
+    static long long int saberi(long long int x,long long int y);
+    static long long int oduzmi(long long int x,long long int y);
+    static long long int mnozi(long long int x,long long int y);
+    
+    public:
+        Razlomak() : _brojnik(0), _nazivnik(1) {}
+        Razlomak(long long int brojnik,long long int nazivnik);
+        Razlomak(long long int brojnik) : _brojnik(brojnik), _nazivnik(1) {}
+        
+        Razlomak(std::initializer_list<long long int> lista);
+        long long DajBrojnik() const;
+        long long DajNazivnik() const;
+        void PostaviBrojnik(long long int brojnik);
+        void PostaviNazivnik(long long int nazivnik);
+        
+        operator long double() const;
+        
+        friend std::ostream &operator <<(std::ostream &tok, const Razlomak &r);
+        friend std::istream &operator >>(std::istream &tok, Razlomak &r);
+        friend Razlomak operator +(const Razlomak &r1, const Razlomak &r2);
+        friend Razlomak operator -(const Razlomak &r1, const Razlomak &r2);
+        friend Razlomak operator *(const Razlomak &r1, const Razlomak &r2);
+        friend Razlomak operator /(const Razlomak &r1, const Razlomak &r2);
+       
+        friend Razlomak operator +=(Razlomak &r1, const Razlomak &r2);
+        friend Razlomak operator -=(Razlomak &r1, const Razlomak &r2);
+        friend Razlomak operator *=(Razlomak &r1, const Razlomak &r2);
+        friend Razlomak operator /=(Razlomak &r1, const Razlomak &r2);
+       
+        friend bool operator ==(const Razlomak &r1, const Razlomak &r2);
+        friend bool operator !=(const Razlomak &r1, const Razlomak &r2);
+        friend bool operator <(const Razlomak &r1, const Razlomak &r2);
+        friend bool operator <=(const Razlomak &r1, const Razlomak &r2);
+        friend bool operator >(const Razlomak &r1, const Razlomak &r2);
+        friend bool operator >=(const Razlomak &r1, const Razlomak &r2);
+        
+};
+
+long long Razlomak::DajBrojnik() const{
+    return _brojnik;
+}
+
+long long Razlomak::DajNazivnik() const{
+    return _nazivnik;
+}
+
+void Razlomak::PostaviBrojnik(long long int brojnik){
+    _brojnik=brojnik;
+}
+
+void Razlomak::PostaviNazivnik(long long int nazivnik){
+    _nazivnik=nazivnik;
+}
+
+Razlomak::operator long double() const {
+    return (long double) this->DajBrojnik()/this->DajNazivnik();
+}
+
+void Razlomak::PostaviRazlomak(long long brojnik,long long nazivnik){
+    _brojnik=brojnik;
+    _nazivnik=nazivnik;
+    auto r=nzd(_brojnik,_nazivnik);
+    _brojnik /=r;
+    _nazivnik /=r;
+    
+    if(nazivnik<0 && brojnik>0){
+        _brojnik=-brojnik;
+        _nazivnik=-nazivnik;
+    }
+    else if(nazivnik<0 && brojnik<0){
+        _brojnik=-brojnik;
+        _nazivnik=-nazivnik;
+    }
+    else if(nazivnik>0 && brojnik<0){
+        _brojnik=brojnik;
+        _nazivnik=nazivnik;
+    }
+    else if(nazivnik==0) 
+    throw std::domain_error("Nazivnik jednak 0.");
+}
+
+long long Razlomak::saberi(long long x, long long y){
+    if ((y>0 && x>M-y) || (y<0 && x<m-y))
+        throw std::overflow_error("Nemoguce dobiti tacan rezultat");
+    return x+y;
+}
+
+long long Razlomak::oduzmi(long long x, long long y){
+    return saberi(x,-y);
+}
+
+long long Razlomak::mnozi(long long x, long long y){
+    if(y>0 && (x<m/y || x>M/y))
+        throw std::overflow_error("Nemoguce dobiti tacan rezultat");
+    else if(y<0 &&(x<M/y || x>m/y))
+        throw std::overflow_error("Nemoguce dobiti tacan rezultat");
+    return x*y;
+}
+
+Razlomak::Razlomak(long long int brojnik, long long int nazivnik){
+    PostaviRazlomak(brojnik,nazivnik);
+}
+
+Razlomak::Razlomak(std::initializer_list<long long int> lista){
+    
+    if(lista.size() == 1){
+        long long int brojnik = *lista.begin();
+        PostaviRazlomak(brojnik,1);
+    }
+    else if(lista.size() == 2){
+        long long int brojnik = *lista.begin();
+        long long int nazivnik = *(lista.begin()+1);
+        PostaviRazlomak(brojnik,nazivnik);
+    }
+    else throw std::logic_error("Nepravilno formatirana inicijalizacijska lista.");
+}
+
+std::ostream &operator <<(std::ostream &tok, const Razlomak &r){
+    if(r.DajNazivnik()==1)
+        tok<<r.DajBrojnik();
+    else 
+    tok<<r.DajBrojnik()<<"/"<<r.DajNazivnik();
+    return tok;
+}
+
+std::istream &operator >>(std::istream &tok, Razlomak &r){
+    char znak(0);
+    long long int brojnik(0), nazivnik(0), r1(0);
+    
+    tok>>std::ws;
+        
+        tok>>brojnik;
+        
+        if (tok.peek()!='\n' && tok.peek()!=-1 && tok.peek()!=' ') {
+            tok>>znak;
+
+            if (znak!='/') 
+                tok.setstate(std::ios::failbit);
+                
+            tok>>nazivnik;
+            if (tok.peek() > '9') {
+                tok.setstate(std::ios::failbit);
+            }
+            r1 = Razlomak::nzd(brojnik, nazivnik);
+            r.PostaviBrojnik(brojnik/r1);
+            r.PostaviNazivnik(nazivnik/r1);
+        }
+        else {
+            r.PostaviBrojnik(brojnik);
+            r.PostaviNazivnik(1);
+        
+        }
+    return tok;
+}
+
+
+Razlomak operator +(const Razlomak &r1, const Razlomak &r2){
+    
+    long long int r = Razlomak::nzd(r1.DajNazivnik(),r2.DajNazivnik());
+    long long int brojnik(Razlomak::saberi(Razlomak::mnozi(r1.DajBrojnik(),r2.DajNazivnik()/r),
+                         Razlomak::mnozi(r2.DajBrojnik(),r1.DajNazivnik()/r)));
+    long long int nazivnik(Razlomak::mnozi(r1.DajNazivnik(),r2.DajNazivnik()/r));
+    
+    return Razlomak(brojnik,nazivnik);
+}
+Razlomak operator -(const Razlomak &r1, const Razlomak &r2){
+    long long int r = Razlomak::nzd(r1.DajNazivnik(),r2.DajNazivnik());
+    long long int brojnik(Razlomak::oduzmi(Razlomak::mnozi(r1.DajBrojnik(),r2.DajNazivnik()/r),
+                         Razlomak::mnozi(r2.DajBrojnik(),r1.DajNazivnik()/r)));
+    long long int nazivnik(Razlomak::mnozi(r1.DajNazivnik(),r2.DajNazivnik()/r));
+    
+    return Razlomak(brojnik,nazivnik);
+}
+
+Razlomak operator *(const Razlomak &r1, const Razlomak &r2){
+    long long int s = Razlomak::nzd(r1.DajBrojnik(),r2.DajNazivnik());
+    long long int t = Razlomak::nzd(r2.DajNazivnik(),r1.DajNazivnik());
+    
+    long long int brojnik(Razlomak::mnozi(r2.DajBrojnik()/s,r2.DajBrojnik()/t));
+    long long int nazivnik(Razlomak::mnozi(r1.DajNazivnik()/t,r2.DajNazivnik()/s));
+    
+    return Razlomak(brojnik,nazivnik);
+}
+        
+Razlomak operator /(const Razlomak &r1, const Razlomak &r2){    
+    long long int r = Razlomak::nzd(r1.DajNazivnik(),r2.DajNazivnik());
+    long long int u = Razlomak::nzd(r1.DajBrojnik(),r2.DajBrojnik());
+    
+    long long int brojnik(Razlomak::mnozi(r1.DajBrojnik()/u,r2.DajNazivnik()/r));
+    long long int nazivnik(Razlomak::mnozi(r1.DajNazivnik()/r,r2.DajBrojnik()/u));
+    
+    return Razlomak(brojnik,nazivnik);
+}
+       
+Razlomak operator +=(Razlomak &r1, const Razlomak &r2){
+            Razlomak pomocni(r1+r2);
+            r1.PostaviBrojnik(pomocni.DajBrojnik());
+            r1.PostaviNazivnik(pomocni.DajNazivnik());
+            return r1;
+        }
+        Razlomak operator -=(Razlomak &r1, const Razlomak &r2){
+            Razlomak pomocni(r1-r2);
+            r1.PostaviBrojnik(pomocni.DajBrojnik());
+            r1.PostaviNazivnik(pomocni.DajNazivnik());
+            return r1;
+        }
+        Razlomak operator *=(Razlomak &r1, const Razlomak &r2){
+            Razlomak pomocni(r1*r2);
+            r1.PostaviBrojnik(pomocni.DajBrojnik());
+            r1.PostaviNazivnik(pomocni.DajNazivnik());
+            return r1;
+        }
+        Razlomak operator /=(Razlomak &r1, const Razlomak &r2){
+            Razlomak pomocni(r1/r2);
+            r1.PostaviBrojnik(pomocni.DajBrojnik());
+            r1.PostaviNazivnik(pomocni.DajNazivnik());
+            return r1;
+        }
+       
+    bool operator ==(const Razlomak &r1, const Razlomak &r2){
+        if(r1.DajBrojnik()==r2.DajBrojnik() && r1.DajNazivnik()==r2.DajNazivnik())
+            return true;
+        return false;
+        }
+        bool operator !=(const Razlomak &r1, const Razlomak &r2){
+            return !(r1 == r2);
+        }
+    bool operator <(const Razlomak &r1, const Razlomak &r2){
+        return (long double) r1 < (long double) r2;
+        }
+        
+    bool operator <=(const Razlomak &r1, const Razlomak &r2){
+        return r1==r2 || ((long double ) r1 <(long double) r2);
+        }
+    
+    bool operator >(const Razlomak &r1, const Razlomak &r2){
+        return (long double) r1> (long double) r2;
+        }
+    
+    bool operator >=(const Razlomak &r1, const Razlomak &r2){
+        return r1==r2 || ((long double ) r1 > (long double) r2);
+        }
+
+
+int main ()
+{
+    Razlomak r, q, t;
+    std::cout<<"Unesite razlomke: \n";
+    std::cin >> r >> q;
+    std::cout << r*q << std::endl;
+    std::cout << r+q << std::endl;
+    std::cout << r/q << std::endl;
+    std::cout << r-q << std::endl;
+    std::cout<< (r<q)<< std::endl;
+    std::cout<< (r>=q)<< std::endl;
+    std::cout<< (r==q)<< std::endl;
+    std::cout<< (r!=q)<< std::endl;
+    std::cout<< (r/=q)<< std::endl;
+    
+     
+    
+	return 0;
+}
+__________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 5, Zadatak 4)
+//Autotestovi by Ivona Ivkovic (mail: iivkovic2@etf.unsa.ba)
+//Za autotestove se obracati *iskljucivo* osobi koja ih pise
+
+#include <iostream>
+#include <stdexcept>
+#include <new>
+#include <iomanip>
+#include <vector>
+#include <initializer_list>
+
+template <typename Tipic>
+class GMatrica{
+    
+    int br_redova;
+    int br_kolona;
+    Tipic elementi[4][4];
+    char ime_matrice;
+    
+    public:  
+        
+        GMatrica(): br_redova(0), br_kolona(0) {}
+        GMatrica(int br_redova, int br_kolona, Tipic Vrijednost=Tipic());
+        
+        template<typename Tipic1>
+        GMatrica(const GMatrica<Tipic1> &m);
+        
+        template<typename Tipic1>
+        GMatrica(const std::initializer_list<std::initializer_list<Tipic1>> &listica);
+        
+        template<typename Tipic1>
+        GMatrica(std::vector<std::vector<Tipic1>> vektorcic);
+        
+        GMatrica (Tipic dvaDniz[4][4]);
+        
+        int DajBrojRedova() {return br_redova;}
+        int DajBrojKolona() {return br_kolona;}
+        
+        template <typename Tip>
+        friend std::ostream &operator <<(std::ostream &tok, const GMatrica<Tip> &mat);  
+        
+        template <typename Tip>
+        friend std::istream &operator >>(std::istream &tok, GMatrica<Tip> &mat);        
+        
+        template <typename Tip>
+        friend GMatrica<Tip> operator +(const GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip>
+        friend GMatrica<Tip> operator -(const GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip>
+        friend GMatrica<Tip> operator *(const GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip>
+        friend GMatrica<Tip> operator +=(GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip>
+        friend GMatrica<Tip> operator *=(GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip,typename Tip1>
+        friend GMatrica<Tip> operator -=(GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip,typename Tip1>
+        friend GMatrica<Tip> operator *(const GMatrica<Tip> &mat1, Tip1 n);
+        
+        template <typename Tip,typename Tip1>
+        friend GMatrica<Tip> operator *=(const GMatrica<Tip> &mat1, Tip1 n);
+        
+        template <typename Tip1,typename Tip>
+        friend GMatrica<Tip> operator *(Tip1 n, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip1,typename Tip>
+        friend GMatrica<Tip> operator *=(Tip1 n, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip>
+        friend bool operator ==(const GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+        
+        template <typename Tip>
+        friend bool operator !=(const GMatrica<Tip> &mat1, const GMatrica<Tip> &mat2);
+       
+        
+        
+        
+        
+    const Tipic operator [](int indeks) const{
+
+        return elementi[indeks];
+    }
+    const Tipic operator () (int i,int j) const{
+      if(i<1 || i>br_redova) throw std::range_error("Neispravan indeks");
+        if(j<1 || j>br_kolona) throw std::range_error("Neispravan indeks");
+        return elementi[i-1][j-1];
+    }
+    
+    
+    auto operator [](int indeks) ->decltype(*elementi){
+        return elementi[indeks];
+    }
+    auto operator () (int i,int j) ->decltype(**elementi){
+        if(i<1 || i>br_redova) throw std::range_error("Neispravan indeks");
+        if(j<1 || j>br_kolona) throw std::range_error("Neispravan indeks");
+        return elementi[i-1][j-1];
+    }
+    
+    
+};
+
+//2D VEKTOR
+
+template <typename Tipic>
+template<typename Tipic1>
+GMatrica<Tipic>::GMatrica(std::vector<std::vector<Tipic1>> vektorcic){
+    for(int i=0; i<vektorcic.size();i++){
+        for(int j=0; j<vektorcic[i].size(); j++){
+            elementi[i][j]=vektorcic[i][j];
+        }
+    }
+}
+
+template <typename Tipic>
+template<typename Tipic1>
+GMatrica<Tipic>::GMatrica(const std::initializer_list<std::initializer_list<Tipic1>> &listica) {
+    br_redova = listica.size();
+    br_kolona = (*listica.begin()).size();
+    int i(0), j(0);
+    for(auto red : listica) {
+        for (auto el: red) {
+            elementi[i][j] = el;
+            j++;
+        }
+        j=0;
+        i++;
+    }
+}
+
+template <typename Tipic>
+GMatrica<Tipic>::GMatrica (Tipic dvaDniz[4][4]) : br_redova(4), br_kolona(4) {
+
+        for(int i(0);i<4;i++){
+            for(int j(0);j<4;j++){
+                elementi[i][j]=dvaDniz[i][j];
+            }
+        }
+}
+
+template<typename Tipic>
+template<typename Tipic1>//,typename Tip2>
+GMatrica<Tipic>::GMatrica (const GMatrica<Tipic1> &m) : br_kolona(m.br_kolona),br_redova(m.br_redova), ime_matrice(m.ime_matrice), elementi(m.elementi){
+    if(m.br_kolona<0 || m.br_kolona>4 || m.br_redova<0 || m.br_redova>4)
+        throw std::logic_error("Ilegalan format matrice");
+         for(int i(0);i<m.br_redova;i++){
+            for(int j(0);j<m.br_kolona;j++){
+                elementi[i][j]=m.elementi[i][j];
+            }
+        }
+}
+
+//INICIJALIZACIJA ZADAVANJEM PARAMETARA
+template<typename Tipic>
+ GMatrica<Tipic>::GMatrica(int br_redova, int br_kolona, Tipic Vrijednost) : br_redova(br_redova), br_kolona(br_kolona){
+     if (br_kolona>4 || br_kolona<0 || br_redova>4 || br_redova<0)
+        throw std::logic_error("Ilegalan format matrice");
+         for(int i(0);i<br_redova;i++){
+            for(int j(0);j<br_kolona;j++){
+                elementi[i][j]=Vrijednost;
+            }
+        }
+    }
+ 
+ 
+ 
+template<typename Tipic>
+std::ostream &operator <<(std::ostream &tok, const GMatrica<Tipic> &mat){
+      int sirina_ispisa(tok.width());
+      if (tok.width() < 6)
+        sirina_ispisa = 6;
+      for(int i(0);i<mat.br_redova;i++){
+            for(int j(0);j<mat.br_kolona;j++){
+                tok<<std::setw(sirina_ispisa)<<mat.elementi[i][j];
+            }
+        std::cout<<std::endl;
+      }
+      return tok;
+  }
+    
+template<typename Tipic>
+std::istream &operator >>(std::istream &tok, GMatrica<Tipic> &mat){
+    //  int sirina_ispisa(tok.width());
+    char znak(0);
+      tok >> znak;
+      mat = GMatrica<Tipic>(4,4, Tipic());
+      int i(0), j(0);
+      while(i < 4) {
+          while(j < 4) {
+              tok >> mat.elementi[i][j];
+              j++;
+              tok >> znak;
+              if (znak == ';' || znak == ']') {
+                  mat.br_kolona = j;
+                  j = 0;
+                  break;
+              }
+              
+          }
+          
+          i++;
+          if (znak == ']') {
+              mat.br_redova = i;
+            break;
+          }
+      }
+      return tok;
+  }
+template<typename Tipic>
+GMatrica<Tipic> operator -(const GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    
+    if((mat1.br_kolona!=mat2.br_kolona) || (mat1.br_redova!=mat2.br_redova))
+        throw std::domain_error("Nedozvoljena operacija");
+        
+        GMatrica<Tipic> mat3(mat1.br_redova,mat1.br_kolona, Tipic());
+        for(int i(0);i<mat1.br_redova;i++){
+            for(int j(0);j<mat1.br_kolona;j++){
+                mat3.elementi[i][j]=mat1.elementi[i][j]-mat2.elementi[i][j];
+            }
+        }
+    return mat3;
+}
+
+template<typename Tipic>
+GMatrica<Tipic> operator +(const GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    
+    if((mat1.br_kolona!=mat2.br_kolona) || (mat1.br_redova!=mat2.br_redova))
+        throw std::domain_error("Nedozvoljena operacija");
+        
+        GMatrica<Tipic> mat3(mat1.br_redova,mat1.br_kolona);
+        for(int i(0);i<mat1.br_redova;i++){
+            for(int j(0);j<mat1.br_kolona;j++){
+                mat3.elementi[i][j]=mat1.elementi[i][j]+mat2.elementi[i][j];
+            }
+        }
+    return mat3;
+}
+
+template<typename Tipic>
+GMatrica<Tipic> operator -=(GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    return mat1=mat1-mat2;
+}
+
+template<typename Tipic>
+GMatrica<Tipic> operator +=(GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    return mat1=mat1+mat2;
+}
+
+template<typename Tipic>
+GMatrica<Tipic> operator *=(GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    return mat1=mat1*mat2;
+}
+       
+
+template<typename Tipic>
+GMatrica<Tipic> operator *(const GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    
+    if(mat1.br_kolona!=mat2.br_redova)
+        throw std::domain_error("Nedozvoljena operacija");
+        
+        GMatrica<Tipic> mat3(mat1.br_redova,mat1.br_kolona);
+        for(int i(0);i<mat1.br_redova;i++){
+            for(int j(0);j<mat1.br_kolona;j++){
+                mat3.elementi[i][j]={};
+            }
+        }
+         for(int i(0);i<mat1.br_redova;i++){
+            for(int k(0);k<mat2.br_kolona;k++){
+                 for(int j(0);j<mat1.br_kolona;j++){
+                    mat3.elementi[i][k]+=(mat1.elementi[i][j]*mat2.elementi[j][k]);
+                 }}}
+    return mat3;
+}
+
+template<typename Tip,typename Tip1>
+GMatrica<Tip> operator *(const GMatrica<Tip> &mat1, Tip1 n){
+    GMatrica<Tip> mat3(mat1);
+        for(int i(0);i<mat3.br_redova;i++){
+            for(int j(0);j<mat3.br_kolona;j++){
+                mat3.elementi[i][j]*=n;
+            }
+        }
+    return mat3;
+}
+
+template<typename Tip,typename Tip1>
+GMatrica<Tip> operator *=(GMatrica<Tip> &mat1, Tip1 n){
+    return mat1=mat1*n;
+}
+
+template<typename Tip,typename Tip1>
+GMatrica<Tip1> operator *(Tip n,const GMatrica<Tip1> &mat1){
+    GMatrica<Tip> mat3(mat1);
+        for(int i(0);i<mat3.br_redova;i++){
+            for(int j(0);j<mat3.br_kolona;j++){
+                mat3.elementi[i][j]*=n;
+            }
+        }
+    return mat3;
+}
+
+template<typename Tip,typename Tip1>
+GMatrica<Tip1> operator *=(Tip n,GMatrica<Tip1> &mat1){
+    return mat1=n*mat1;
+}
+
+
+template<typename Tipic>
+bool operator ==(const GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    if(mat1.br_redova != mat2.br_redova || mat1.br_kolona != mat2.br_kolona)
+        return false;
+    
+    for(int i(0);i<mat1.br_redova;i++){
+        for(int j(0);j<mat1.br_kolona;j++){
+            if(mat1.elementi[i][j]!=mat2.elementi[i][j])
+                return false;
+        }
+    }
+    return true;
+}
+
+template<typename Tipic>
+bool operator !=(const GMatrica<Tipic> &mat1, const GMatrica<Tipic> &mat2){
+    if(!(mat1==mat2)) return true;
+return false;
+}
+
+ 
+int main ()
+{
+   GMatrica<int> m1,m2;
+   std::cin >> m1>>m2;
+   std::cout << m1 << std::endl;
+   std::cout<< m1*m2 << " "<<m1+m2;
+	return 0;
+}
+
+_________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 6, Zadatak 1)
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <utility>
+#include <memory>
+#include <stdexcept>
+#include <algorithm>
+#include <fstream>
+
+class Spremnik{
+    protected:
+    
+    double tezina;
+    std::string naziv;
+    
+    public: 
+    Spremnik(){}
+    virtual ~Spremnik() {}
+    Spremnik (double tezina, std::string naziv) : tezina(tezina), naziv(naziv) {}
+    //std::string DajNaziv() const{return naziv;}
+    double DajTezinu() const{return tezina;}
+    virtual double DajUkupnuTezinu() const{ return tezina;}
+    virtual void Ispisi() const=0;
+    
+    virtual Spremnik* DajKopiju() const = 0;
+    
+    
+};
+
+class Sanduk : public Spremnik{
+    std::vector<double> tezine_predmeta;
+
+    
+    public: 
+    
+    Sanduk(){}
+    //~Sanduk(){}
+    Sanduk(double _tezina, std::string _naziv, std::vector<double> _tezine) :
+        Spremnik(_tezina,_naziv), tezine_predmeta(_tezine){}
+        
+    double DajUkupnuTezinu() const override {
+      double suma (0);
+        for(int i(0); i<tezine_predmeta.size();i++){
+            suma+=tezine_predmeta[i];
+        }
+        suma+=DajTezinu();
+        
+        return suma;
+    }
+    
+    std::vector<double> DajTezine() const {
+        return tezine_predmeta;
+    }
+    
+    void Ispisi () const override {
+        std::cout<<"Vrsta spremnika: Sanduk\nSadrzaj: "<<Spremnik::naziv;
+        std::cout<<"\nTezine predmeta: ";
+        for(int i(0); i<tezine_predmeta.size();i++){
+            std::cout<<tezine_predmeta[i]<<" ";
+        }
+        std::cout<<"(kg)\nVlastita tezina: "<<Spremnik::DajTezinu()<<" (kg)"
+                 <<"\nUkupna tezina: "<<DajUkupnuTezinu()<<" (kg)"<<std::endl;
+    }
+    
+    Sanduk* DajKopiju() const {
+        return new Sanduk(DajTezinu(), naziv, DajTezine());
+    }
+    
+};
+
+class Vreca : public Spremnik{
+    double tezine_praskaste_materije;
+    
+    public: 
+    
+    Vreca () {}
+    //~Vreca() {}
+    Vreca(double _tezina, std::string _naziv, double _tezine) :
+        Spremnik(_tezina,_naziv), tezine_praskaste_materije(_tezine){}
+
+    double DajUkupnuTezinu() const override {
+      return DajTezinu()+tezine_praskaste_materije;
+    }
+
+    void Ispisi () const override {
+        std::cout<<"Vrsta spremnika: Vreca\nSadrzaj: "<<Spremnik::naziv
+                 <<"\nVlastita tezina: "<<Spremnik::DajTezinu()<<" (kg)"
+                 <<"\nTezina pohranjene materije: "<<DajUkupnuTezinu()-DajTezinu() << " (kg)"
+                 <<"\nUkupna tezina: "<<DajUkupnuTezinu()<<" (kg)"<<std::endl;
+    }
+    
+    Vreca* DajKopiju() const {
+        return new Vreca(DajTezinu(), naziv, tezine_praskaste_materije);
+    }
+    
+};
+
+class Bure : public Spremnik{
+    double ro_specificna_tezina;
+    double zapremina;
+    
+    public:
+    
+    Bure (){}
+    //~Bure(){}
+    Bure(double _tezina, std::string _naziv, double _ro_specificna_tezina, double _zapremina) :
+        Spremnik(_tezina,_naziv), 
+        ro_specificna_tezina(_ro_specificna_tezina), zapremina(_zapremina)  {}
+
+    double Dajro() const{return ro_specificna_tezina;}
+    double DajZapreminu() const {return zapremina;}
+    
+    double DajUkupnuTezinu() const override {
+      double masa;
+      masa=DajZapreminu()*Dajro()*1e-3 + DajTezinu();
+         return masa;
+    }
+    
+    
+    void Ispisi () const override {
+        std::cout<<"Vrsta spremnika: Bure\nSadrzaj: "<<Spremnik::naziv;
+        std::cout<<"\nVlastita tezina: "<<Spremnik::DajTezinu()<<" (kg)"
+                 <<"\nSpecificna tezina tecnosti: "<<Dajro()<<" (kg/m^3)"
+                 <<"\nZapremina tecnosti: "<<DajZapreminu()<<" (l)"
+                 <<"\nUkupna tezina: "<<DajUkupnuTezinu()<<" (kg)"<<std::endl;
+    }  
+    
+    Bure* DajKopiju() const {
+        return new Bure(DajTezinu(), naziv, Dajro(), DajZapreminu());
+    }
+
+};
+
+class Skladiste {
+    
+    std::vector<std::shared_ptr<Spremnik>> vektor;
+    
+    public: 
+    
+    Skladiste(){
+        vektor.clear();
+    }
+    ~Skladiste() {
+        for (int i = 0; i < vektor.size(); i++)
+            vektor[i] = nullptr;
+        vektor.clear();
+    }
+    Skladiste(const Skladiste &s){
+        
+        try{
+            vektor.clear();
+            for (int i = 0; i < s.vektor.size(); i++)
+                vektor.push_back(s.vektor[i]);
+        }
+        catch(...){
+            throw;
+        }
+    }
+        
+    
+    Skladiste &operator =(const Skladiste &s){
+        vektor=s.vektor;
+        return *this;
+    }
+    
+    
+    Sanduk* DodajSanduk (double tezina, std::string naziv, std::vector<double> tezine){
+        std::shared_ptr<Sanduk> temp(std::make_shared<Sanduk> (tezina,naziv,tezine));
+        vektor.push_back(temp);
+        return temp.get();
+    }
+    
+    Vreca* DodajVrecu (double tezina, std::string naziv, double tezine){
+        std::shared_ptr<Vreca> temp(std::make_shared<Vreca> (tezina,naziv,tezine));
+        vektor.push_back(temp);
+        return temp.get();
+    }
+    Bure* DodajBure (double tezina, std::string naziv, double ro_specificna_tezina, double zapremina){
+        std::shared_ptr<Bure> temp(std::make_shared<Bure> (tezina,naziv,ro_specificna_tezina,zapremina));
+        vektor.push_back(temp);
+        return temp.get();
+    }
+    
+    Spremnik* DodajSpremnik (Spremnik *objekat, bool istinitost){
+        if (istinitost) {
+            std::shared_ptr<Spremnik> temp(objekat);
+            vektor.push_back(temp);
+            return temp.get();
+        }
+        else {
+            std::shared_ptr<Spremnik> temp(objekat->DajKopiju());
+            vektor.push_back(temp);
+            return temp.get();
+        }
+    }
+    
+    Spremnik* BrisiSpremnik (Spremnik *nekispremnik) { 
+        if (vektor.size() == 0)
+            throw std::range_error("Skladiste je prazno");
+        for (int i=0; i < vektor.size(); i++) {
+            if(vektor[i].get()==nekispremnik) {
+                vektor.erase(vektor.begin()+i);
+                return nekispremnik;
+            }
+        }
+    }
+
+    
+    Spremnik& DajNajlaksi() const {
+        if (vektor.size() == 0)
+            throw std::range_error("Skladiste je prazno");
+        double najlaksi(10000.); int p(-1);
+        
+        for (int i = 0; i < vektor.size(); i++) {
+            if (!vektor[i])
+                continue;
+            if (vektor[i]->DajTezinu() < najlaksi) {
+                najlaksi = vektor[i]->DajTezinu();
+                p = i;
+            }
+        }
+        return *vektor[p].get();
+        
+    }
+    
+    Spremnik& DajNajtezi() const{
+        if (vektor.size() == 0)
+            throw std::range_error("Skladiste je prazno");
+            
+        double najtezi(-1e10); int p(-1);
+        for (int i = 0; i < vektor.size(); i++) {
+            if (!vektor[i])
+                continue;
+            if (vektor[i]->DajTezinu() > najtezi) {
+                najtezi = vektor[i]->DajTezinu();
+                p = i;
+            }
+        }
+        return *vektor[p].get();
+    }
+    
+    int BrojPreteskih (double broj) const{
+        int brojac(0);
+        for(int i(0); i<vektor.size();i++){
+            if(vektor[i]->DajUkupnuTezinu()>broj) brojac++;
+        }
+        return brojac;
+    }
+   
+    int BrojPreteskih (const double &broj) {
+        int brojac(0);
+        for(int i(0); i<vektor.size();i++){
+            if(vektor[i]->DajUkupnuTezinu()>broj) brojac++;
+        }
+        return brojac;
+    }
+   
+    void IzlistajSkladiste() {
+        for (int i = 0; i < vektor.size()-1; i++) {
+            for (int j = i+1; j < vektor.size(); j++) {
+                if (vektor[i]->DajUkupnuTezinu() < vektor[j]->DajUkupnuTezinu())
+                    vektor[i].swap(vektor[j]);
+            }
+        }
+        for(int i(0); i<vektor.size();i++){
+            if (vektor[i] != nullptr)
+                vektor[i]->Ispisi();
+        }
+        
+    }
+    
+    void UcitajIzDatoteke(const char ime_datoteke[]) {
+        std::ifstream ulaz(ime_datoteke);
+        if(!ulaz)
+            throw std::logic_error("Trazena datoteka ne postoji");
+        
+        char tip(0);
+        ulaz>>std::ws;
+        while(ulaz>>tip) {
+            if (tip != 'S' && tip != 'B' && tip != 'V')
+                throw std::logic_error("Datoteka sadrzi besmislene podatke");
+            char ime[30];
+            if (tip == 'S') {
+                ulaz.getline(ime,30);
+                double tezina; int br(0);
+                std::vector<double> tezine; double t;
+                ulaz>>tezina>>br;
+                if(!ulaz)
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                for (int i=0; i < br; i++) {
+                    ulaz>>t;
+                    if(!ulaz)
+                        throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                    tezine.push_back(t);
+                }
+                DodajSanduk(tezina, &ime[1], tezine);
+            }
+            else if(tip == 'V') {
+                ulaz.getline(ime,30); 
+                double tezina(0), tezina_poh(0);
+                ulaz>>tezina;
+                if(!ulaz)
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                ulaz>>tezina_poh;
+                DodajVrecu(tezina,&ime[1],tezina_poh);
+            }
+            else if(tip == 'B') {
+                ulaz.getline(ime,30);
+                double tezina(0), spec(0), zap(0);
+                ulaz>>tezina>>spec>>zap;
+                if(!ulaz)
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                DodajBure(tezina,&ime[1],spec,zap);
+            }
+            if (ulaz.bad())
+                throw std::logic_error("Problemi pri citanju datoteke");
+        }
+        ulaz.close();
+    }
+};
+
+
+
+int main ()
+{
+    try
+    {
+
+        Skladiste ETF;
+        ETF.UcitajIzDatoteke("ROBA.TXT");
+        ETF.IzlistajSkladiste();
+    }
+    catch(std::logic_error re)
+    {
+        std::cout << re.what();
+    }
+	return 0;
+}
+
+__________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 6, Zadatak 2)
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <utility>
+#include <memory>
+#include <stdexcept>
+#include <algorithm>
+#include <fstream>
+
+class Spremnik{
+    protected:
+    double tezina;
+    std::string naziv;
+    
+    public: 
+    Spremnik(){}
+    virtual ~Spremnik() {}
+    Spremnik (double tezina, std::string naziv) : tezina(tezina), naziv(naziv) {}
+    std::string DajNaziv() const{return naziv;}
+    double DajTezinu() const{return tezina;}
+    virtual double DajUkupnuTezinu() const{ return tezina;}
+    virtual void Ispisi() const=0;
+    
+    virtual Spremnik* DajKopiju() const = 0;
+    
+    
+};
+
+class Sanduk : public Spremnik{
+    std::vector<double> tezine_predmeta;
+
+    
+    public: 
+    
+    Sanduk(){}
+    //~Sanduk(){}
+    Sanduk(double _tezina, std::string _naziv, std::vector<double> _tezine) :
+        Spremnik(_tezina,_naziv), tezine_predmeta(_tezine){}
+        
+    double DajUkupnuTezinu() const override {
+      double suma (0);
+        for(int i(0); i<tezine_predmeta.size();i++){
+            suma+=tezine_predmeta[i];
+        }
+        suma+=DajTezinu();
+        
+        return suma;
+    }
+    
+    std::vector<double> DajTezine() const {
+        return tezine_predmeta;
+    }
+    
+    void Ispisi () const override {
+        std::cout<<"Vrsta spremnika: Sanduk\nSadrzaj: "<<Spremnik::naziv;
+        std::cout<<"\nTezine predmeta: ";
+        for(int i(0); i<tezine_predmeta.size();i++){
+            std::cout<<tezine_predmeta[i]<<" ";
+        }
+        std::cout<<"(kg)\nVlastita tezina: "<<Spremnik::DajTezinu()<<" (kg)"
+                 <<"\nUkupna tezina: "<<DajUkupnuTezinu()<<" (kg)"<<std::endl;
+    }
+    
+    Sanduk* DajKopiju() const {
+        return new Sanduk(DajTezinu(), naziv, DajTezine());
+    }
+    
+};
+
+class Vreca : public Spremnik{
+    double tezine_praskaste_materije;
+    
+    public: 
+    
+    Vreca () {}
+    //~Vreca() {}
+    Vreca(double _tezina, std::string _naziv, double _tezine) :
+        Spremnik(_tezina,_naziv), tezine_praskaste_materije(_tezine){}
+
+    double DajUkupnuTezinu() const override {
+      return DajTezinu()+tezine_praskaste_materije;
+    }
+
+    void Ispisi () const override {
+        std::cout<<"Vrsta spremnika: Vreca\nSadrzaj: "<<Spremnik::naziv
+                 <<"\nVlastita tezina: "<<Spremnik::DajTezinu()<<" (kg)"
+                 <<"\nTezina pohranjene materije: "<<DajUkupnuTezinu()-DajTezinu() << " (kg)"
+                 <<"\nUkupna tezina: "<<DajUkupnuTezinu()<<" (kg)"<<std::endl;
+    }
+    
+    Vreca* DajKopiju() const {
+        return new Vreca(DajTezinu(), naziv, tezine_praskaste_materije);
+    }
+    
+};
+
+class Bure : public Spremnik{
+    double ro_specificna_tezina;
+    double zapremina;
+    
+    public:
+    
+    Bure (){}
+    //~Bure(){}
+    Bure(double _tezina, std::string _naziv, double _ro_specificna_tezina, double _zapremina) :
+        Spremnik(_tezina,_naziv), 
+        ro_specificna_tezina(_ro_specificna_tezina), zapremina(_zapremina)  {}
+
+    double Dajro() const{return ro_specificna_tezina;}
+    double DajZapreminu() const {return zapremina;}
+    
+    double DajUkupnuTezinu() const override {
+      double masa;
+      masa=DajZapreminu()*Dajro()*1e-3 + DajTezinu();
+         return masa;
+    }
+    
+    
+    void Ispisi () const override {
+        std::cout<<"Vrsta spremnika: Bure\nSadrzaj: "<<Spremnik::naziv;
+        std::cout<<"\nVlastita tezina: "<<Spremnik::DajTezinu()<<" (kg)"
+                 <<"\nSpecificna tezina tecnosti: "<<Dajro()<<" (kg/m^3)"
+                 <<"\nZapremina tecnosti: "<<DajZapreminu()<<" (l)"
+                 <<"\nUkupna tezina: "<<DajUkupnuTezinu()<<" (kg)"<<std::endl;
+    }  
+    
+    Bure* DajKopiju() const {
+        return new Bure(DajTezinu(), naziv, Dajro(), DajZapreminu());
+    }
+
+};
+
+class Skladiste {
+    
+    std::vector<std::shared_ptr<Spremnik>> vektor;
+    
+    public: 
+    
+    Skladiste(){
+        vektor.clear();
+    }
+    ~Skladiste() {
+        for (int i = 0; i < vektor.size(); i++)
+            vektor[i] = nullptr;
+        vektor.clear();
+    }
+    Skladiste(const Skladiste &s){
+        
+        try{
+            vektor.clear();
+            for (int i = 0; i < s.vektor.size(); i++)
+                vektor.push_back(s.vektor[i]);
+        }
+        catch(...){
+            throw;
+        }
+    }
+        
+    
+    Skladiste &operator =(const Skladiste &s){
+        vektor=s.vektor;
+        return *this;
+    }
+    
+    
+    Sanduk* DodajSanduk (double tezina, std::string naziv, std::vector<double> tezine){
+        std::shared_ptr<Sanduk> temp(std::make_shared<Sanduk> (tezina,naziv,tezine));
+        vektor.push_back(temp);
+        return temp.get();
+    }
+    
+    Vreca* DodajVrecu (double tezina, std::string naziv, double tezine){
+        std::shared_ptr<Vreca> temp(std::make_shared<Vreca> (tezina,naziv,tezine));
+        vektor.push_back(temp);
+        return temp.get();
+    }
+    Bure* DodajBure (double tezina, std::string naziv, double ro_specificna_tezina, double zapremina){
+        std::shared_ptr<Bure> temp(std::make_shared<Bure> (tezina,naziv,ro_specificna_tezina,zapremina));
+        vektor.push_back(temp);
+        return temp.get();
+    }
+    
+    Spremnik* DodajSpremnik (Spremnik *objekat, bool istinitost){
+        if (istinitost) {
+            std::shared_ptr<Spremnik> temp(objekat);
+            vektor.push_back(temp);
+            return temp.get();
+        }
+        else {
+            std::shared_ptr<Spremnik> temp(objekat->DajKopiju());
+            vektor.push_back(temp);
+            return temp.get();
+        }
+    }
+    
+    Spremnik* BrisiSpremnik (Spremnik *nekispremnik) { 
+        if (vektor.size() == 0)
+            throw std::range_error("Skladiste je prazno");
+        for (int i=0; i < vektor.size(); i++) {
+            if(vektor[i].get()==nekispremnik) {
+                vektor.erase(vektor.begin()+i);
+                return nekispremnik;
+            }
+        }
+    }
+
+    
+    Spremnik& DajNajlaksi() const {
+        if (vektor.size() == 0)
+            throw std::range_error("Skladiste je prazno");
+        double najlaksi(10000.); int p(-1);
+        
+        for (int i = 0; i < vektor.size(); i++) {
+            if (!vektor[i])
+                continue;
+            if (vektor[i]->DajTezinu() < najlaksi) {
+                najlaksi = vektor[i]->DajTezinu();
+                p = i;
+            }
+        }
+        return *vektor[p].get();
+        
+    }
+    
+    Spremnik& DajNajtezi() const{
+        if (vektor.size() == 0)
+            throw std::range_error("Skladiste je prazno");
+            
+        double najtezi(-1e10); int p(-1);
+        for (int i = 0; i < vektor.size(); i++) {
+            if (!vektor[i])
+                continue;
+            if (vektor[i]->DajTezinu() > najtezi) {
+                najtezi = vektor[i]->DajTezinu();
+                p = i;
+            }
+        }
+        return *vektor[p].get();
+    }
+    
+    int BrojPreteskih (double broj) const{
+        int brojac(0);
+        for(int i(0); i<vektor.size();i++){
+            if(vektor[i]->DajUkupnuTezinu()>broj) brojac++;
+        }
+        return brojac;
+    }
+   
+    int BrojPreteskih (const double &broj) {
+        int brojac(0);
+        for(int i(0); i<vektor.size();i++){
+            if(vektor[i]->DajUkupnuTezinu()>broj) brojac++;
+        }
+        return brojac;
+    }
+   
+    void IzlistajSkladiste() {
+        for (int i = 0; i < vektor.size()-1; i++) {
+            for (int j = i+1; j < vektor.size(); j++) {
+                if (vektor[i]->DajUkupnuTezinu() < vektor[j]->DajUkupnuTezinu())
+                    vektor[i].swap(vektor[j]);
+            }
+        }
+        for(int i(0); i<vektor.size();i++){
+            if (vektor[i] != nullptr)
+                vektor[i]->Ispisi();
+        }
+        
+    }
+    
+    void UcitajIzDatoteke(const char ime_datoteke[]) {
+        std::ifstream ulaz(ime_datoteke);
+        if(!ulaz)
+            throw std::logic_error("Trazena datoteka ne postoji");
+        
+        char tip(0);
+        ulaz>>std::ws;
+        while(ulaz>>tip) {
+            if (tip != 'S' && tip != 'B' && tip != 'V')
+                throw std::logic_error("Datoteka sadrzi besmislene podatke");
+            char ime[30];
+            if (tip == 'S') {
+                ulaz.getline(ime,30);
+                double tezina; int br(0);
+                std::vector<double> tezine; double t;
+                ulaz>>tezina>>br;
+                if(!ulaz)
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                for (int i=0; i < br; i++) {
+                    ulaz>>t;
+                    if(!ulaz)
+                        throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                    tezine.push_back(t);
+                }
+                DodajSanduk(tezina, &ime[1], tezine);
+            }
+            else if(tip == 'V') {
+                ulaz.getline(ime,30); 
+                double tezina(0), tezina_poh(0);
+                ulaz>>tezina;
+                if(!ulaz)
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                ulaz>>tezina_poh;
+                DodajVrecu(tezina,&ime[1],tezina_poh);
+            }
+            else if(tip == 'B') {
+                ulaz.getline(ime,30);
+                double tezina(0), spec(0), zap(0);
+                ulaz>>tezina>>spec>>zap;
+                if(!ulaz)
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                DodajBure(tezina,&ime[1],spec,zap);
+            }
+            if (ulaz.bad())
+                throw std::logic_error("Problemi pri citanju datoteke");
+        }
+        ulaz.close();
+    }
+};
+
+class PolimorfniSpremnik {
+    Spremnik *p_spremnik;
+    void Test() const {
+        if(!p_spremnik) throw std::logic_error("Nespecificiran spremnik");
+    }
+    public:
+    PolimorfniSpremnik() : p_spremnik(nullptr) {}
+    ~PolimorfniSpremnik() { delete p_spremnik; }
+    
+    void Ispisi() { Test(); p_spremnik->Ispisi(); }
+    
+    PolimorfniSpremnik(const Spremnik &s) : p_spremnik(s.DajKopiju()) {}
+    
+    PolimorfniSpremnik(const PolimorfniSpremnik &s) {
+        if(!s.p_spremnik) p_spremnik = nullptr;
+        else p_spremnik = s.p_spremnik->DajKopiju();
+    }
+    PolimorfniSpremnik(PolimorfniSpremnik &&s) {
+        p_spremnik = s.p_spremnik; s.p_spremnik = nullptr;
+    }
+    PolimorfniSpremnik &operator =(const PolimorfniSpremnik &s) {
+        Spremnik *p_novi(nullptr);
+        if(s.p_spremnik != nullptr) p_novi = s.p_spremnik->DajKopiju();
+        delete p_spremnik;
+        p_spremnik = p_novi;
+        return *this;
+    }
+    std::string DajNaziv() const{ Test(); return p_spremnik->DajNaziv();}
+    double DajTezinu() const{ Test(); return p_spremnik->DajTezinu();}
+    double DajUkupnuTezinu() const{ Test(); return p_spremnik->DajUkupnuTezinu();}
+};
+
+
+int main ()
+{
+    PolimorfniSpremnik s1(Sanduk(3, "Svicevi :D", {5, 2, 3, 1, 7, 8}));
+    std::cout << s1.DajTezinu()  << std::endl << s1.DajUkupnuTezinu() << std::endl;
+    s1.Ispisi();
+	return 0;
+}
+
+___________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 6, Zadatak 3)
+
+#include <iostream>
+#include <iomanip>
+#include <stdexcept>
+#include <new>
+#include <string>
+#include <fstream>
+
+template <typename TipEl>
+class Matrica
+{
+    int br_redova, br_kolona;
+    TipEl **elementi;
+    char ime_matrice;
+    static TipEl **AlocirajMemoriju(int br_redova, int br_kolona);
+    static void DealocirajMemoriju(TipEl **elementi, int br_redova);
+    void KopirajElemente(TipEl **elementi);
+    
+public:
+    Matrica(int br_redova, int br_kolona, char ime = 0);
+    
+    Matrica(const Matrica &m);
+    
+    Matrica(Matrica &&m);
+    
+    Matrica(const char ime_datoteke[], bool binarna = true);
+
+    ~Matrica()
+    {
+        DealocirajMemoriju(elementi, br_redova);
+    }
+    
+    Matrica &operator =(const Matrica &m);
+    
+    Matrica &operator =(Matrica &&m);
+    
+    void SacuvajUTekstualnuDatoteku(const char ime_datoteke[]) const;
+    void ObnoviIzTekstualneDatoteke(const char ime_datoteke[]);
+    
+    void SacuvajUBinarnuDatoteku(const char ime_datoteke[]) const;
+    void ObnoviIzBinarneDatoteke(const char ime_datoteke[]);
+    
+    template<typename Tip>
+    friend std::ostream &operator <<(std::ostream &p,const Matrica<Tip> &matrica);
+    
+    template<typename Tip>
+    friend std::istream &operator >>(std::istream &p,Matrica<Tip> &matrica);
+    
+    template<typename Tip>
+    friend Matrica<Tip> operator -(const Matrica<Tip> &mat1, const Matrica<Tip> &mat2);
+     
+    template<typename Tip>
+    friend Matrica<Tip> operator +(const Matrica<Tip> &mat1, const Matrica<Tip> &mat2);
+     
+    template<typename Tip>
+    friend Matrica<Tip> operator -=(Matrica<Tip> &mat1, const Matrica<Tip> &mat2);
+     
+    template<typename Tip>
+    friend Matrica<Tip> operator +=(Matrica<Tip> &mat1, const Matrica<Tip> &mat2);
+       
+    template<typename Tip>
+    friend Matrica<Tip> operator *(const Matrica<Tip> &mat1, const Matrica<Tip> &mat2);
+         
+    template<typename Tip,typename Tip1>
+    friend Matrica<Tip> operator *(const Matrica<Tip> &mat1, Tip1 n);
+         
+    template<typename Tip1, typename Tip>
+    friend Matrica<Tip> operator *(Tip1 n, const Matrica<Tip> &mat2);
+         
+    template<typename Tip,typename Tip1>
+    friend Matrica<Tip> operator *=(Matrica<Tip> &mat1, Tip1 n);
+    
+    template<typename Tip>
+    friend Matrica<Tip> operator *=(Matrica<Tip> &mat1, const Matrica<Tip> &mat2);
+      
+      
+    /*TipEl* operator [](int index) {
+       // if(index<1 || index>br_kolona) throw std::range_error("Neispravan indeks");
+        return elementi[index];
+    }
+    
+    TipEl operator ()(int i,int j) {
+         if(i<1 || i>br_kolona) throw std::range_error("Neispravan indeks");
+         if(j<1 || j>br_redova) throw std::range_error("Neispravan indeks");
+      
+        return elementi[i-1][j-1];
+    }*/
+    
+    const TipEl* operator [](int index) const {
+       // if(index<1 || index>br_kolona) throw std::range_error("Neispravan indeks");
+        return elementi[index];
+    }
+    
+     const TipEl operator ()(int i,int j) const {
+         if(i<1 || i>br_kolona) throw std::range_error("Neispravan indeks");
+         if(j<1 || j>br_redova) throw std::range_error("Neispravan indeks");
+      
+        return elementi[i-1][j-1];
+    }
+    
+    auto operator [](int indeks) ->decltype(*elementi) {//const {
+        return elementi[indeks];
+}
+    auto operator ()(int i,int j)->decltype(**elementi) {//const {
+         if(i<1 || i>br_redova) throw std::range_error("Neispravan indeks");
+         if(j<1 || j>br_kolona) throw std::range_error("Neispravan indeks");
+        return elementi[i-1][j-1];
+    }
+    
+    operator std::string() const{
+        
+        std::string stringic;
+        stringic.push_back('{');
+        
+            for(int i=0; i<br_redova;i++){
+                stringic.push_back('{');
+                    for(int j=0; j<br_kolona;j++){
+                        int hehe(elementi[i][j]);
+                        std::string pomocnistirngic;
+                            do{
+                                pomocnistirngic.push_back((hehe%10)+'0');
+                                hehe/=10;
+                            }while(hehe!=0);
+                        
+                        for(int n(pomocnistirngic.size()-1); n>=0; n--){
+                            stringic.push_back(pomocnistirngic[n]);
+                        }
+                        
+                        if(j!=br_kolona-1) stringic.push_back(',');
+                    }
+                stringic.push_back('}');
+                if(i!=br_redova-1) stringic.push_back(',');
+            }
+        
+        stringic.push_back('}');
+        return stringic;
+        
+        
+    }
+    
+};
+
+
+template <typename TipEl>
+TipEl ** Matrica<TipEl>::AlocirajMemoriju(int br_redova, int br_kolona)
+{
+    TipEl **elementi(new TipEl*[br_redova] {});
+    try
+    {
+        for(int i = 0; i < br_redova; i++) elementi[i] = new TipEl[br_kolona];
+    }
+    catch(...)
+    {
+        DealocirajMemoriju(elementi, br_redova);
+        throw;
+    }
+    return elementi;
+}
+
+
+template <typename TipEl>
+void Matrica<TipEl>::DealocirajMemoriju(TipEl **elementi, int br_redova)
+{
+    if (elementi != 0) {
+        for(int i = 0; i < br_redova; i++) delete[] elementi[i];
+        delete[] elementi;
+    }
+}
+
+
+template <typename TipEl>
+Matrica<TipEl>::Matrica(int br_redova, int br_kolona, char ime) :
+    br_redova(br_redova), br_kolona(br_kolona), ime_matrice(ime),
+    elementi(AlocirajMemoriju(br_redova, br_kolona)) {}
+    
+    
+template <typename TipEl>
+void Matrica<TipEl>::KopirajElemente(TipEl **elementi)
+{
+    for(int i = 0; i < br_redova; i++)
+        for(int j = 0; j < br_kolona; j++)
+            Matrica::elementi[i][j] = elementi[i][j];
+}
+
+
+template <typename TipEl>
+Matrica<TipEl>::Matrica(const char ime_datoteke[], bool binarna) {
+    if (!binarna) {
+        ObnoviIzTekstualneDatoteke(ime_datoteke);
+    }
+    else {
+        std::ifstream ulaz(ime_datoteke, std::ios::binary);
+        
+        if (!ulaz)
+            throw std::logic_error("Trazena datoteka ne postoji");
+    
+        int m(0), n(0);
+        
+        if (!ulaz.read(reinterpret_cast<char*>(&m), sizeof m))
+            throw std::logic_error("Datoteka sadrzi besmislene podatke"); 
+        if (!ulaz.read(reinterpret_cast<char*>(&n), sizeof n))
+            throw std::logic_error("Datoteka sadrzi besmislene podatke");
+        
+        elementi = AlocirajMemoriju(m,n);
+        br_kolona = n; br_redova = m;
+        for(int i=0; i<br_redova;i++){
+            for(int j=0; j<br_kolona;j++){
+                TipEl temp;
+                if (!ulaz.read(reinterpret_cast<char*>(&temp), sizeof temp)) {
+                    DealocirajMemoriju(elementi,n);
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                }
+                elementi[i][j] = temp;
+            }
+        }
+        ulaz.close();
+    }
+}
+
+template <typename TipEl>
+Matrica<TipEl>::Matrica(const Matrica<TipEl> &m) : br_redova(m.br_redova),
+    br_kolona(m.br_kolona), ime_matrice(m.ime_matrice),
+    elementi(AlocirajMemoriju(m.br_redova, m.br_kolona))
+{
+    KopirajElemente(m.elementi);
+}
+
+
+template <typename TipEl>
+Matrica<TipEl>::Matrica(Matrica<TipEl> &&m) : br_redova(m.br_redova),
+    br_kolona(m.br_kolona), elementi(m.elementi), ime_matrice(m.ime_matrice)
+{
+    m.br_redova = 0;
+    m.elementi = nullptr;
+}
+
+
+template <typename TipEl>
+Matrica<TipEl> &Matrica<TipEl>::operator =(const Matrica<TipEl> &m)
+{
+    if(br_redova < m.br_redova || br_kolona < m.br_kolona)
+    {
+        TipEl **novi_prostor(AlocirajMemoriju(m.br_redova, m.br_kolona));
+        DealocirajMemoriju(elementi, br_redova);
+        elementi = novi_prostor;
+    }
+    else if(br_redova > m.br_redova)
+        for(int i = m.br_redova; i < br_redova; i++) delete elementi[i];
+    br_redova = m.br_redova;
+    br_kolona = m.br_kolona;
+    ime_matrice = m.ime_matrice;
+    KopirajElemente(m.elementi);
+    return *this;
+}
+
+
+template <typename TipEl>
+Matrica<TipEl> &Matrica<TipEl>::operator =(Matrica<TipEl> &&m)
+{
+    std::swap(br_redova, m.br_redova);
+    std::swap(br_kolona, m.br_kolona);
+    std::swap(ime_matrice, m.ime_matrice);
+    std::swap(elementi, m.elementi);
+    return *this;
+}
+
+template <typename TipEl>
+void Matrica<TipEl>::SacuvajUTekstualnuDatoteku(const char ime_datoteke[]) const {
+    std::ofstream izlaz(ime_datoteke);
+    for(int i=0; i<br_redova;i++){
+        for(int j=0; j<br_kolona;j++){
+            izlaz<<elementi[i][j]; 
+            if (j < br_kolona-1)
+                izlaz<<",";
+        }
+        izlaz << std::endl;
+    }
+    izlaz.close();
+}
+
+template <typename TipEl>
+void Matrica<TipEl>::SacuvajUBinarnuDatoteku(const char ime_datoteke[]) const {
+    std::ofstream izlaz(ime_datoteke, std::ios::binary);
+    
+    int m(br_redova), n(br_kolona);
+    izlaz.write(reinterpret_cast<char*>(&m), sizeof m);
+    izlaz.write(reinterpret_cast<char*>(&n), sizeof n);
+    for(int i=0; i<br_redova;i++){
+        for(int j=0; j<br_kolona;j++){
+            TipEl temp(elementi[i][j]);
+            izlaz.write(reinterpret_cast<char*>(&temp), sizeof temp); 
+        }
+    }
+    izlaz.flush();
+    izlaz.close();
+}
+
+template <typename TipEl>
+void Matrica<TipEl>::ObnoviIzBinarneDatoteke(const char ime_datoteke[]) {
+    std::ifstream ulaz(ime_datoteke, std::ios::binary);
+    if (!ulaz) 
+        throw std::logic_error("Trazena datoteka ne postoji");
+        
+    int m(0), n(0);
+    if (!ulaz.read(reinterpret_cast<char*>(&m), sizeof m))
+            throw std::logic_error("Datoteka sadrzi besmislene podatke"); 
+        if (!ulaz.read(reinterpret_cast<char*>(&n), sizeof n))
+            throw std::logic_error("Datoteka sadrzi besmislene podatke");
+    DealocirajMemoriju(elementi, br_redova);
+    AlocirajMemoriju(m,n);
+    for(int i=0; i<br_redova;i++){
+        for(int j=0; j<br_kolona;j++){
+            TipEl temp = TipEl();
+            if(!ulaz.read(reinterpret_cast<char*>(&temp), sizeof temp))
+                throw std::logic_error("Datoteka sadrzi besmislene podatke");
+            elementi[i][j] = temp;
+        }
+    }
+    ulaz.close();
+}
+
+template <typename TipEl>
+void Matrica<TipEl>::ObnoviIzTekstualneDatoteke(const char ime_datoteke[]) {
+    std::ifstream ulaz(ime_datoteke);
+    if (!ulaz) 
+        throw std::logic_error("Trazena datoteka ne postoji");
+    
+    
+    elementi = AlocirajMemoriju(10,10);
+    int i(0), j(0);
+    TipEl temp; char t(0);
+    
+    ulaz >> std::ws;
+    
+    while(ulaz >> temp) {
+        /*if (!ulaz)
+            throw std::logic_error("Datoteka sadrzi besmislene podatke");*/
+        if (ulaz.peek() != '\n' && !ulaz.eof()) {
+            ulaz >> t;
+            if (t != ',') {
+                DealocirajMemoriju(elementi,10);
+                ulaz.clear();
+                ulaz.close();
+                throw std::logic_error("Datoteka sadrzi besmislene podatke");
+            }
+            elementi[i][j] = temp;
+            j++;
+        }
+        else {
+            elementi[i][j] = temp;
+            if (i == 0) {
+                br_kolona = j+1;
+            }
+            else {
+                if (j != br_kolona-1) {
+                    DealocirajMemoriju(elementi,10);
+                    ulaz.clear();
+                    ulaz.close();
+                    throw std::logic_error("Datoteka sadrzi besmislene podatke");
+                }
+            }
+            i++;
+            j = 0;
+            
+        }
+    }
+    br_redova = i;
+    
+    for (int i = br_redova; i < 10; i++)
+        delete[] elementi[i];
+    //KopirajElemente(_elementi);
+    //DealocirajMemoriju(_elementi,10);
+    
+    
+    if (ulaz.bad())
+        throw std::logic_error("Problemi pri citanju datoteke");
+    ulaz.close();
+}
+
+template <typename TipEl>
+std::ostream &operator <<(std::ostream &p, const Matrica <TipEl> &matrica){
+    int sirina_ispisa(p.width());
+    if (sirina_ispisa < 6)
+        sirina_ispisa = 6;
+    for(int i=0; i<matrica.br_redova;i++){
+        for(int j=0; j<matrica.br_kolona;j++){
+            p<<std::setw(sirina_ispisa)<<matrica.elementi[i][j];
+     }
+     p<<std::endl;
+    }
+    return p;
+}
+
+template <typename TipEl>
+std::istream &operator >>(std::istream &p, Matrica <TipEl> &matrica){
+  //  int sirina_ispisa(std::cout<<)
+    for(int i=0; i<matrica.br_redova;i++)
+        for(int j=0; j<matrica.br_kolona;j++){
+            std::cout<<matrica.ime_matrice<<"("<<i+1<<","<<j+1<<") = ";
+        p>>matrica.elementi[i][j];
+    }
+    return p;
+}
+
+template <typename TipEl>
+Matrica <TipEl> operator -(const Matrica<TipEl> &mat1,const Matrica<TipEl> &mat2){
+    
+    //provjeravamo da li su matrice istih dimenzija
+    if((mat1.br_kolona != mat2.br_kolona) || (mat1.br_redova != mat2.br_redova)) 
+        throw std::domain_error("Matrice nemaju jednake dimenzije!");
+         //formiramo novu matricu mat3
+        Matrica<TipEl> mat3(mat1.br_redova,mat1.br_kolona);
+            for(int i=0; i<mat1.br_redova; i++){
+                for(int j=0; j<mat1.br_kolona;j++){
+                    mat3.elementi[i][j]=mat1.elementi[i][j]-mat2.elementi[i][j];
+                }
+            }
+            return mat3;
+}
+
+template <typename TipEl>
+Matrica <TipEl> operator +(const Matrica<TipEl> &mat1,const Matrica<TipEl> &mat2){
+    
+    //provjeravamo da li su matrice istih dimenzija
+    if((mat1.br_kolona != mat2.br_kolona) || (mat1.br_redova != mat2.br_redova))
+         throw std::domain_error("Matrice nemaju jednake dimenzije!");
+         //formiramo novu matricu mat3
+        Matrica<TipEl> mat3(mat1.br_redova,mat1.br_kolona);
+            for(int i=0; i<mat1.br_redova; i++){
+                for(int j=0; j< mat1.br_kolona;j++){
+                    mat3.elementi[i][j]=mat1.elementi[i][j]+mat2.elementi[i][j];
+                }
+            }
+            return mat3;
+}
+
+
+template<typename Tip>
+    Matrica<Tip> operator -=(Matrica<Tip> &mat1, const Matrica<Tip> &mat2){
+        return mat1=mat1-mat2;
+    }
+    
+template<typename Tip>
+    Matrica<Tip> operator +=(Matrica<Tip> &mat1, const Matrica<Tip> &mat2){
+        return mat1=mat2+mat1;
+    }
+
+template<typename Tip>
+    Matrica<Tip> operator *(const Matrica<Tip> &mat1, const Matrica<Tip> &mat2){
+        
+        if(mat1.br_kolona!=mat2.br_redova) throw std::domain_error("Matrice nisu saglasne za mnozenje");
+        
+        Matrica<Tip> mat3 (mat1.br_redova,mat2.br_kolona);
+            for(int i(0); i<mat1.br_redova; i++)
+            for(int j(0); j<mat2.br_kolona; j++)
+                mat3.elementi[i][j]={};
+            
+        for(int i(0); i<mat1.br_redova; i++){
+            for(int k(0); k<mat2.br_kolona; k++){
+                for(int j(0); j<mat1.br_kolona; j++){
+                    mat3.elementi[i][k]+=(mat1.elementi[i][j]*mat2.elementi[j][k]);
+                }
+            }
+        }
+        return mat3;
+}
+         
+template<typename Tip,typename Tip1>
+    Matrica<Tip> operator *(const Matrica<Tip> &mat1, Tip1 n){
+        Matrica<Tip> mat3(mat1);
+        for(int i(0); i<mat3.br_redova;i++){
+            for(int j(0); j<mat3.br_kolona;j++){
+                mat3.elementi[i][j]*=n;
+            }
+        }
+        return mat3;
+    }
+         
+template<typename Tip11,typename Tip>
+Matrica<Tip> operator *(Tip11 n, const Matrica<Tip> &mat1){
+    Matrica<Tip> mat3(mat1);
+        for(int i(0); i<mat3.br_redova;i++){
+            for(int j(0); j<mat3.br_kolona;j++){
+                mat3.elementi[i][j]*=n;
+            }
+        }
+        return mat3;
+    }
+    
+template<typename Tip,typename Tip1>
+Matrica<Tip> operator *=(Matrica<Tip> &mat1, Tip1 n){
+    for(int i(0); i<mat1.br_redova;i++){
+            for(int j(0); j<mat1.br_kolona;j++){
+                mat1.elementi[i][j]*=n;
+            }
+        }
+        return mat1;
+}
+
+template<typename Tip>
+Matrica<Tip> operator *=(Matrica<Tip> &mat1, const Matrica<Tip> &mat2){
+    return mat1=mat1*mat2;
+}
+    
+/*
+template <typename TipEl>
+void Matrica<TipEl>::Unesi()
+{
+    for(int i = 0; i < br_redova; i++)
+        for(int j = 0; j < br_kolona; j++)
+        {
+            std::cout << ime_matrice << "(" << i + 1 << "," << j + 1 << ") = ";
+            std::cin >> elementi[i][j];
+        }
+}
+/*template <typename TipEl>
+
+void Matrica<TipEl>::Ispisi(int sirina_ispisa) const
+{
+    for(int i = 0; i < br_redova; i++)
+    {
+        for(int j = 0; j < br_kolona; j++)
+            std::cout << std::setw(sirina_ispisa) << elementi[i][j];
+        std::cout << std::endl;
+    }
+}*/
+
+int main()
+{
+    int m,n;
+    std::cout << "Unesi broj redova i kolona za matrice:\n";
+    std::cin >> m >> n;
+    try
+    {
+        Matrica<double> a(m, n, 'A'), b(m, n, 'B');
+        std::cout << "Unesi matricu A:\n";
+        std::cin >> a;
+        std::cout << "Unesi matricu B:\n";
+        std::cin >> b;
+        std::cout << "Zbir ove dvije matrice je:\n";
+        std::cout << std::setw(7) << a + b;
+        (a+b).SacuvajUTekstualnuDatoteku("rezultat.txt");
+        Matrica<double> ab(2,2,'A');
+        ab.ObnoviIzTekstualneDatoteke("rezultat.txt");
+        std::cout << ab;
+        ab = ab * 2;
+        ab.SacuvajUBinarnuDatoteku("rezultati.dat");
+        ab.ObnoviIzBinarneDatoteke("rezultati.dat");
+        std::cout << ab;
+        Matrica<double> ba("rezultat.txt", true);
+        std::cout << ba;
+        
+        Matrica<double> c("rezultati.dat", false);
+        std::cout << c;
+
+    }
+    catch(std::bad_alloc)
+    {
+        std::cout << "Nema dovoljno memorije!\n";
+    }
+    return 0;
+}
+
+__________________________________________________________________________________________
+
+//TP 16/17 (Zadaæa 6, Zadatak 4)
+//autotestovi by Enil Pajic (epajic1@etf.unsa.ba)
+
+#include <iostream>
+#include <fstream>
+#include <functional>
+
+template <typename TipElemenata>
+ void SortirajBinarnuDatoteku(const char ime_datoteke[], std::function<bool(TipElemenata, TipElemenata)> kriterij = std::less<TipElemenata>()) {
+     
+     std::fstream datoteka(ime_datoteke, std::ios::in | std::ios::out | std::ios::binary);
+     if (!datoteka)
+        throw std::logic_error("Datoteka ne postoji");
+    
+    TipElemenata el1, el2;
+    datoteka.seekg(0, std::ios::end);
+    int duzina_datoteke(datoteka.tellg());
+    int broj_elem(duzina_datoteke / sizeof(TipElemenata));
+    // sortiranje
+    for (int i = 0; i < broj_elem-1; i++) {
+        for (int j = i+1; j < broj_elem; j++) {
+            datoteka.seekg(i*sizeof(TipElemenata));
+            datoteka.read(reinterpret_cast<char*>(&el1), sizeof el1);
+            datoteka.seekg(j*sizeof(TipElemenata));
+            datoteka.read(reinterpret_cast<char*>(&el2), sizeof el2);
+            if(!kriterij(el1, el2)) {
+                datoteka.seekp(j*sizeof(TipElemenata));
+                datoteka.write(reinterpret_cast<char*>(&el1), sizeof el1);
+                datoteka.seekp(i*sizeof(TipElemenata));
+                datoteka.write(reinterpret_cast<char*>(&el2), sizeof el2);
+            }
+        }
+    }
+    datoteka.close();
+    
+ }
+
+int main ()
+{
+    int num[5] = {3, 4, 1, 2, 6};
+    std::fstream out("BROJEVI.DAT", std::ios::out | std::ios::binary);
+    
+    for (int i = 0; i < 5; i++) {
+        out.write(reinterpret_cast<char*>(&num[i]), sizeof num[i]);
+    }
+    out.close();
+    
+    try {
+    
+        SortirajBinarnuDatoteku<int>("BROJEVI.DAT",  [](int x, int y) { return x > y; });
+    
+        std::fstream in("BROJEVI.DAT", std::ios::in | std::ios::binary);
+        in.read(reinterpret_cast<char*>(num), sizeof num);
+        for (int i = 0; i < 5; i++) {
+            std::cout << num[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+    catch(std::logic_error &e) {
+        std::cout << e.what();
+    }
+    
+    return 0;
+}
+__________________________________________________________________________________________
+
+/* 
+    TP 16/17 (Tutorijal 14, Zadatak 1)
+	Autotestovi by Enil Pajic.
+	NOTE: ukoliko smatrate da je greska u autotestu, radite po postavci, bice uvazeno
+	NOTE: vrsit ce se provjera na prepisivanje tutorijala (i kaznjavati sa oduzimanjem poena od ukupno osvojenih)
+	NOTE: ovaj tutorijal se salje kao zadaca na Zamger
+*/
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+
+class Student {
+	std::string ime;
+	int index, dan,mjesec,godina;
+	double prosjek;
+	public:
+		Student(std::string _ime, int _index, int _dan, int _mjesec, int _godina, double _prosjek) :
+			ime(_ime), index(_index), dan(_dan), mjesec(_mjesec), godina(_godina), prosjek(_prosjek) {}
+		double DajProsjek() const { return prosjek; }
+		std::string DajIme() const { return ime; }
+		int DajIndex() const { return index; }
+		std::string DajDatum() const {
+			return std::to_string(dan) + "/" + std::to_string(mjesec) + "/" + std::to_string(godina);
+		}
+};
+
+bool IspravnostDatuma(int d, int m, int g){
+        int broj_dana[]{31,28,31,30,31,30,31,31,30,31,30,31};
+        if((g%4==0 && g%100!=0) || g%400==0) broj_dana[1]++;
+        if(g<1 || m<1 || m>12 || d<1 || d>broj_dana[m-1]) return false;
+        return true;
+        
+        // ova funkcija je kopirana iz predavanja,kopirala sam samo nju prije nego sam vidjela da je striktno zabranjeno 
+    }
+
+int main ()
+{
+	std::ifstream ulazni_tok("STUDENTI.TXT");
+	std::ofstream izlaz("IZVJESTAJ.TXT");
+	if (!ulazni_tok) 
+		std::cout << "Datoteka STUDENTI.TXT ne postoji!\n";
+	char _ime[30];
+	int _index, _dan, _mjesec, _godina;
+	int _ocjena, br_ocjena; double _prosjek(0);
+	std::vector<Student> studenti;
+	while(ulazni_tok.getline(_ime, sizeof _ime)) {
+		ulazni_tok >> _index;
+		ulazni_tok.ignore(10000,'\n');
+		char t(0);
+		ulazni_tok >> _dan >> t >> _mjesec >> t >> _godina;
+		if (!IspravnostDatuma(_dan, _mjesec, _godina)) {
+			std::cout << "Neispravan format datoteke STUDENTI.TXT\n";
+			return 0;
+		}
+		ulazni_tok.ignore(10000,'\n');
+		
+		if(!ulazni_tok) {
+			std::cout << "Neispravan format datoteke STUDENTI.TXT\n";
+			return 0;
+		}
+		
+		_prosjek = 0;
+		br_ocjena = 0;
+		while(ulazni_tok >> _ocjena) {
+			if (_ocjena < 5 || _ocjena > 10) {
+				std::cout << "Neispravan format datoteke STUDENTI.TXT\n";
+				return 0;
+			}
+			if (_ocjena > 5) {
+				_prosjek += _ocjena;
+				br_ocjena++;
+			}
+			if (ulazni_tok.peek() != '\n')
+				ulazni_tok >> t;
+			else 
+				break;
+			//
+			//if (!ulazni_tok) break;
+			
+		
+		}
+		if (ulazni_tok.bad()) {
+			std::cout << "Problemi pri citanju datoteke STUDENTI.TXT\n";
+			return 0;
+		}
+		
+		_prosjek /= br_ocjena;
+		Student temp(_ime, _index, _dan, _mjesec, _godina, _prosjek);
+		studenti.push_back(temp);
+		ulazni_tok.ignore(10000,'\n');
+	}
+	std::sort(studenti.begin(), studenti.end(), 
+	[] (const Student& a, const Student &b) {
+		if (fabs(a.DajProsjek() - b.DajProsjek()) < 1e-6)
+			return a.DajIndex() < b.DajIndex();
+		else 
+			return a.DajProsjek() > b.DajProsjek();	
+	});
+	// ZAGLAVLJE
+	izlaz << std::left << std::setw(30) << "Student" << std::setw(10) << "Indeks";
+	izlaz << std::left << std::setw(20) << "Datum rodjenja" << std::setw(10) << "Prosjek" << std::endl;
+	izlaz << std::left << std::setw(30) << "-------" << std::setw(10) << "------";
+	izlaz << std::left << std::setw(20) << "--------------" << std::setw(10) << "-------" << std::endl;
+	
+	for (Student s: studenti) {
+		izlaz << std::left << std::setw(30) << s.DajIme() << std::setw(10) << s.DajIndex();
+		izlaz << std::left << std::setw(20) << s.DajDatum() << std::setw(10) << std::fixed << std::setprecision(2) <<  s.DajProsjek() << std::endl;
+	}
+	
+	return 0;
+}
+
+___________________________________________________________________________________________
+
+/* 
+    TP 16/17 (Tutorijal 14, Zadatak 2)
+	Autotestovi by Enil Pajic.
+	NOTE: ukoliko smatrate da je greska u autotestu, radite po postavci, bice uvazeno
+	NOTE: vrsit ce se provjera na prepisivanje tutorijala (i kaznjavati sa oduzimanjem poena od ukupno osvojenih)
+	NOTE: ovaj tutorijal se salje kao zadaca na Zamger
+*/
+#include <iostream>
+#include <cmath>
+#include <string>
+#include <fstream>
+#include <algorithm>
+
+const double pi = 4*atan(1);
+
+class Predmet {
+	double gustina;
+	public:
+	Predmet(double _gustina) : gustina(_gustina) {}
+	virtual ~Predmet() {}
+	virtual double DajZapreminu() const = 0;
+	virtual double DajTezinu () const { return DajZapreminu() * gustina; }
+};
+
+class Lopta : public Predmet {
+	double poluprecnik;
+	public:
+	Lopta(double _gustina, double _poluprecnik) : Predmet(_gustina), poluprecnik(_poluprecnik) {}
+	~Lopta() {}
+	double DajZapreminu() const override { return 4*pi*poluprecnik*poluprecnik*poluprecnik / 3; }
+};
+
+class Cigla : public Predmet {
+	double a,b,c;
+	public:
+	Cigla(double _gustina, double _a, double _b, double _c) : Predmet(_gustina), a(_a), b(_b), c(_c) {}
+	~Cigla() {}
+	double DajZapreminu() const override { return a*b*c; }
+};
+
+int main ()
+{
+	std::string ime_datoteke;
+	std::cout << "Unesite ime datoteke: ";
+	std::cin >> ime_datoteke;
+	Predmet **predmeti;
+	std::ifstream ulaz(ime_datoteke);
+	if (!ulaz) {
+		std::cout << "Trazena datoteka ne postoji";
+		return 0;
+	}	
+	int br_predmeta(0);
+	ulaz >> br_predmeta;
+	ulaz.ignore(10000,'\n');
+	//std::cout << br_predmeta;
+	
+	predmeti = new Predmet*[br_predmeta];
+	
+	for (int i = 0; i < br_predmeta; i++) {
+		if (ulaz.peek() == 'L') {
+			double g, r; char t(0);
+			ulaz>>t;
+			//std::cout << "LOPTA\n";
+			ulaz >> g >> r;
+			if (r < 0.00000001 || g < 0.0000001) {
+				std::cout << "Neispravan format datoteke";
+				return 0;
+			}
+			ulaz.ignore(10000,'\n');
+			//std::cout << g << r << std::endl;
+			predmeti[i] = new Lopta(g,r);
+		}
+		else if(ulaz.peek() == 'C') {
+			double g, a, b, c; char t(0);
+			ulaz>> t;
+			//std::cout << "CIGLA\n";
+			ulaz >> g >> a >> b >> c;
+			if (a < 0.0000001 || b <  0.000001 || c < 0.000001 || g < 0.00001) {
+				std::cout << "Neispravan format datoteke";
+				return 0;
+			}
+			ulaz.ignore(10000,'\n');
+			//std::cout << g << a << b << c << std::endl;
+			predmeti[i] = new Cigla(g,a,b,c);
+		}
+		else {
+			std::cout << "Neispravan format datoteke";
+			return 0;
+		}
+			
+	}
+	std::sort(predmeti, predmeti+br_predmeta, [] (const Predmet* p1, const Predmet* p2) {
+		return p1->DajTezinu() > p2->DajTezinu();	
+	});
+	
+	for (int i = 0; i < br_predmeta; i++) {
+		std::cout << predmeti[i]->DajTezinu() << std::endl;
+	}
+	
+	for (int i = 0; i < br_predmeta; i++) {
+		delete predmeti[i];
+		
+	}
+	delete[] predmeti;
+	
+	return 0;
+}
+___________________________________________________________________________________________
+
+/* 
+    TP 16/17 (Tutorijal 14, Zadatak 4)
+	Autotestovi by Enil Pajic.
+	NOTE: ukoliko smatrate da je greska u autotestu, radite po postavci, bice uvazeno
+	NOTE: vrsit ce se provjera na prepisivanje tutorijala (i kaznjavati sa oduzimanjem poena od ukupno osvojenih)
+	NOTE: ovaj tutorijal se salje kao zadaca na Zamger
+*/
+#include <iostream>
+#include <fstream>
+#include <stdexcept>
+
+void IzvrniDatoteku(std::string ime) {
+	std::fstream ulazni_tok(ime, std::ios::in | std::ios::out | std::ios::binary);
+	if(!ulazni_tok)
+		throw std::logic_error("Datoteka ne postoji");
+	ulazni_tok.seekg(0, std::ios::end);
+	int duzina_datoteke(ulazni_tok.tellg());
+	int broj_elemenata(duzina_datoteke / sizeof(double));
+	
+	//std::cout << broj_elemenata;
+	
+	for(int i = 0; i < int(broj_elemenata/2); i++) {
+		double broj1, broj2, temp;
+		ulazni_tok.seekg(i * sizeof(double));
+		ulazni_tok.read(reinterpret_cast<char*>(&broj1), sizeof(broj1));
+		ulazni_tok.seekg((broj_elemenata-1-i)*sizeof(double));
+		ulazni_tok.read(reinterpret_cast<char*>(&broj2), sizeof(broj2));
+		ulazni_tok.seekp(i * sizeof(double));
+		ulazni_tok.write(reinterpret_cast<char*>(&broj2), sizeof(broj2));
+		ulazni_tok.seekp((broj_elemenata-1-i)*sizeof(double));
+		ulazni_tok.write(reinterpret_cast<char*>(&broj1), sizeof(broj1));
+	}
+}
+
+int main ()
+{
+	double niz[] = {1, 2, 0.5, 0.2, 6.23};
+	double novi[5]{};
+	std::ofstream f ("dat.bin", std::ios::binary);
+	f.write((char *)niz, sizeof niz);
+	f.close();
+	IzvrniDatoteku("dat.bin");
+	std::ifstream ff ("dat.bin", std::ios::binary);
+	ff.read((char *)novi, sizeof novi);
+	for (int i = 0; i < 5; ++i) std::cout << novi[i] << ", ";
+	ff.close();
+	return 0;
+}
